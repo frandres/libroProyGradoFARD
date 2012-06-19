@@ -1,0 +1,276 @@
+\chapter{Pseudocódigos de algoritmos utilizados}\label{chap:apendiceA}
+
+A continuación se presentan pseudocódigos de algoritmos descritos en distintas secciones del libro.
+
+\begin{code}[includerangemarker=false,frame=single,label=alg:ConstRutas,caption=Pseudocódigo de construcción de las rutas de los vehículos a partir de la estructura de datos de representación de la solución,firstnumber=100, mathescape]
+$\textbf{Entrada:}$ Numero de rutas $k$, Arreglo de enteros $inicio$, Arreglo de enteros $proximo$
+ 
+i := 0
+j := 0
+Cadena de enteros s := < 0 >
+while (i $\leqslant$ k) do
+	j := $inicio$[i]
+	while($proximo$[j] $\neq$ 0)			
+		s := s||< $proximo$[j] >
+		j := $proximo$[j]
+	end while
+	s :=  s||< 0 >
+	i := i+1
+end while 
+
+$\textbf{return}$ s 
+\end{code}
+
+%\begin{code}[includerangemarker=false,frame=single,label=alg:AlgIns,caption=Pseudocódigo de Algoritmo de Inserción ,firstnumber=100, mathescape]
+%$\textbf{Entrada:}$ Numero de rutas $r$, Factor $\gamma$
+%    
+%Sea S un arreglo compuesto por $r$ rutas vacias
+%InicializarListaDeCandidatos(LC)
+%entero i := 1
+%while (i $\leqslant$ r) do
+%	S[i] := t $\in$ LC seleccionado aleatoriamente
+%	Actualizar(LC)
+%	i := i+1
+%end while
+%
+%while (LC $\neq \emptyset$) do
+%	Evaluar f(t,r) $\forall t \in LC$
+%	g^{min} := Min{f(t,r)|t$\in$LC}
+%	m := cliente $t$ asociado con g^{min}
+%	Insertar(S,m)
+%	Actualizar(LC)
+%end while
+%
+%$\textbf{return}$ S 
+%\end{code}
+
+\begin{code}[includerangemarker=false,frame=single,label=alg:VND,caption=Pseudocódigo de VND,firstnumber=100, mathescape]
+$\textbf{Entrada}$: $S_0$
+k := 1,...,$K_{max}$ 
+Seleccionar vecindades $N_{k}$ para 
+//$N_{k}$ es el conjunto de vecindades inter-ruta utilizados en el siguiente orden:
+//k=1 shift(1,0), k=2 crossover(), k=3 Swap(1,1), k=4 Shift(2,0), k=5 Swap(2,1) y 
+//k=6 Swap(2,2).
+
+$S_{mejor}$ := $S_0$
+k := 1
+while (k < $k_{max}$+1)
+    $S^{'}$ := GenerarVecindadVND($N_{k}$,($S_{mejor}$))
+	if(Costo($S_{mejor}$) $>$ Costo($S^{'}$))		
+		$S^{''}$ := $Or-opt$($S^{'}$)
+		$S^{'''}$ := $2-opt$($S^{''}$)
+		$S^{''''}$ := $Swap$($S^{'''}$)		
+		$S^{'''''}$ := $Reverse$($S^{''''}$)
+		if(Costo($S^{'}$) $>$ Costo($S^{'''''}$))
+			$S_{mejor}$ := $S^{'''''}$
+		else
+			$S_{mejor}$ := $S^{'}$
+		end if	
+		k := 1
+	else
+	 k := k+1
+	end if 			
+end while
+
+$\textbf{return}$ $S_{mejor}$
+\end{code}
+
+\begin{code}[includerangemarker=false,frame=single,label=alg:ILS-VND-M,caption=Pseudocódigo de ILS-VND-M,firstnumber=100, mathescape]
+$\textbf{Entrada}$: $y$, n, LS, k
+
+i:=0
+Costo($S_{mejor}$) := $\infty$
+while (i $<$ n) do
+	$S$ := ConstruirSolucionInicial($y$,k)
+	$S$ := VND($S$)		
+	iterILS := 0
+	while (iterILS $<$ LS) do
+		iterILS := iterILS+1
+		$S^{'}$ := Perturbar($S$)
+		$S_{actual}$ := VND($S^{'}$)	
+		if(Costo($S$) $>$ Costo($S_{actual}$))		
+			$S$ := $S_{actual}$
+			iterILS := 0		
+		end if									
+	end while
+	if(Costo($S_{mejor}$) $>$ Costo($S$))		
+		$S_{mejor}$ := $S$		
+	end if			
+	i := i+1
+end while
+
+$\textbf{return}$ $S_{mejor}$	
+\end{code}
+
+\begin{code}[includerangemarker=false,frame=single,label=alg:GTS,caption=Pseudocódigo de GTS-M,firstnumber=100, mathescape]
+$\textbf{Entrada}$: $mni$
+
+Lista $Lista\_Tabu$ := $\emptyset$
+$S_0$ := ConstruirSolucionInicial()
+$S_{mejor}$ := $S_0$
+$S_{actual}$ := $S_0$
+$it$ = 0
+while ($it$ < $mni$) do
+	vecindad := ConstruirVecindad($S_{actual}$)
+	$Costo(S_{optima})$ := $\infty$ 			
+	$\textbf{foreach}$ $x \in vecindad$ do
+		if (Costo($x$) > Costo($S_{mejor}$))
+			$S_{optima}$ := $x$
+		else
+			if ($x \notin Lista\_Tabu$)
+				if (Costo($x$) < Costo($S_{optima}$))
+					$S_{optima}$ := $x$
+				end if
+			end if
+		end if
+	end $\textbf{foreach}$
+	$S_{actual}$ := $S_{optima}$
+	AgregarMovimientoReverso($Lista\_Tabu$)
+	if (Costo($S_{actual}$) < Costo($S_{mejor}$))
+		$S_{mejor}$ := $S_{actual}$
+		$it$ := 0
+	end if	
+	$peor\_arco$ := ArcoMaximiceUtilidad($S_{actual}$)
+	PenalizarArco($peor\_arco$)
+	SustraerMovimiento($Lista\_Tabu$)
+	$it$ := $it$ + 1
+end while
+
+$\textbf{return}$ $S_{mejor}$	
+\end{code}
+
+\begin{code}[includerangemarker=false,frame=single,label=alg:MACO,caption=Pseudocódigo de AS-M,firstnumber=100, mathescape]
+$\textbf{Entrada}$: $n$
+
+ComputarVisibilidad()
+$S_0$ := ConstruirSolucionInicial()
+InicializarFeromonas($S_0$)
+$S_{mejor}$ := $S_0$
+$hormigas$ := CrearHormigas()
+$Costo(S_{mejor})$ := $\infty$ 
+$it$ := 0
+while ($it$ < $n$) do
+	$\textbf{foreach}$ $h \in hormigas$ do
+		while ($\neg$todos_clientes_visitados) do
+			Seleccionar proximo cliente a visitar y agregarlo a la ruta
+			if ($\neg$clientes_factibles)
+				Retornar al deposito y crear una nueva ruta
+			end if
+		end while
+		$S_{actual}$ := ObtenerSolucion($h$)
+		VND($S_{actual}$)
+		if (Costo($S_{actual}$) < Costo($S_{mejor}$))
+			$S_{mejor}$ := $S_{actual}$
+		end if
+	end $\textbf{foreach}$
+	EvaporarReforzarFeromonas()
+	$it$ := $it$ + 1
+end while
+
+$\textbf{return}$ $S_{mejor}$	
+\end{code}
+
+\begin{code}[includerangemarker=false,frame=single,label=alg:SCA-M,caption=Pseudocódigo de SS-M,firstnumber=100, mathescape]
+$Metodo$ $de$ $Generacion$ $y$ $Diversificacion$ - Crea un conjunto de soluciones diversas $P$ de tamano $Psize$
+
+Construir el $RefSet$ con $b$ mejores y diversas soluciones de $P$, RefSet := $\lbrace S^1,...,S^b \rbrace$. Ordenarlas de manera creciente en base a su costo.  
+
+$S_{mejor}$ := $S^1$
+$NewSolutions$ := True
+while ($NewSolutions$) do
+	$NewSubset$ := GenerarSubconjuntos($RefSet$)
+	$NewSolutions$ := False
+    while ($NewSubset\neq\emptyset $)do
+    	$Ss$ := Seleccionar($NewSubset$)
+    	$S$ := Combinar(Ss) 
+    	$x$ := Mejorar(S)
+		if(($x$ $\notin$ $RefSet$) $\wedge$ ($Costo(x)<Costo(S^b$)))
+			$S^b$ := $x$
+			Ordenar($RefSet$)
+			$NewSolutions$ := True											
+		end if
+		Eliminar($Ss$, $NewSubset$)    	    				
+	end while
+end while
+
+i := 0
+while(i$<$b)do
+	$S^{i+1}$ := VND($S^{i+1}$)
+end while
+Ordenar($Refset$)
+$S_{mejor}$ := $S^1$
+
+$\textbf{return}$ $S_{mejor}$
+\end{code}
+
+
+\begin{code}[includerangemarker=false,frame=single,label=algimp:GA,caption=Pseudocódigo de GA-M,firstnumber=100, mathescape]
+$\textbf{Entrada}$: p, maxgen, cprob, mprob
+
+Pop := GenerarPoblacionInicial(p)
+fitnessP := CalcularFitness(Pop,p)
+
+i:=0
+while (i $<$ n) do		
+	j:=0
+	while (j $<$ (popsize/2)) do
+		padres := Seleccion(Pop)
+		k := ((randomInt())$Mod$100})+1
+		if(k $\leqslant$ cprob)			
+			hijos := CrossOver(padres)
+			k := ((randomInt())$Mod$100)+1
+			if(k $\leqslant$ mprob)
+				hijos := Mutacion(hijos)
+			end if	
+			fitnessHijos := CalcularFitness(hijos)
+			Pop := ActualizarPoblacion(hijos, fitnessHijos, Pop,fitnessP)
+		end if
+		j:=j+1	
+	end while
+	i := i+1
+end while
+
+i:=0
+while(i$<$p)do
+	$P_i$ := VND($P_i$) 
+	i:=i+1
+end while
+S := SeleccionarMejor(P)
+$\textbf{return}$ $S$	
+
+\end{code}
+
+\begin{code}[includerangemarker=false,frame=single,label=alg:MPSO,caption=Pseudocódigo de PSO-M,firstnumber=100, mathescape]
+$\textbf{Entrada}$: $n$
+$\textbf{Entrada}$: $L$
+
+$S_{mejor}$ := $\infty$
+$enjambre$ := CrearParticulas(L)
+$\textbf{foreach}$ $particula$ $\in$ $enjambre$ do
+	$S_{actual}$ := ConstruirSolucionInicial()	
+	$particula$ := Codificar($S_{actual}$)
+	Velocidad($particula$) := 0
+end $\textbf{foreach}$
+
+$it$ := 0
+while ($it$ < $n$) do
+	$\textbf{foreach}$ $particula$ $\in$ $enjambre$ do
+		$S_{actual}$ := Decodificar($particula$)
+		VND($S_{actual}$)
+		$particula$ := Codificar($S_{actual}$)
+		ActualizarPBest($particula$)
+		ActualizarLBest($particula$)
+		ActualizarNBest($particula$)
+		if (Costo($S_{actual}$) < Costo($S_{mejor}$))
+			$S_{mejor}$ := $S_{actual}$
+			ActualizarGBest()
+		end if
+		ActualizarInercia()
+		ActualizarVelocidad($particula$)				
+		ActualizarPosicion($particula$)
+	end $\textbf{foreach}$
+	$it := $it + 1
+end while
+
+$\textbf{return}$ $S_{mejor}$	
+\end{code}

@@ -1,0 +1,23 @@
+\chapter*{Introducción} \label{chap:intro}
+\addcontentsline{toc}{chapter}{Introducción}
+
+ Este trabajo consiste en el estudio de una variante del problema de enrutamiento de vehículos (VRP por las siglas de Vehicle Routing Problem) el cual se define como un problema de optimización combinatoria del área de logística y distribución de bienes.\\
+ 
+ La variante seleccionada para el estudio recibe el nombre de  VRPSPD (Vehicle Routing Problem with Simultaneus Pickup and Delivery), la cual tiene la particularidad que los clientes pueden recibir y entregar bienes de manera simultánea. La importancia de este tipo de problema es su gran cantidad de aplicaciones en procesos industriales y de servicio. Entre los ejemplos a citar,  est\'{a} la entrega y recolección de botellas llenas y vacías por un mismo vehículo en la industria de bebidas, la distribución de materiales de impresión, en la cual un vehículo entrega y recolecta cartuchos de tinta llenos y  vacíos, y por \'{u}ltimo, otra de las aplicaciones típicas, es la manufactura de equipos electrónicos, donde la fábrica requiere recolectar y disponer de productos cuya vida útil haya expirado.\\ 
+ 
+ VRPSPD fue abordado por primera vez por Min \cite{primervrpspd} cuyo trabajo consistió en un caso de estudio para el sistema de distribución de una biblioteca pública. En la literatura se encuentran muchos trabajos que han resuelto satisfactoriamente el problema, algunos muy destacados que han logrado buenos resultados y otros que han sido bases fundamentales para otros. Uno de estos trabajos destacados en la literatura es el de \cite{SalhiNagy} que propuso tres heurísticas basadas en inserción para resolver el problema, dos de ellas de tipo ambiciosa y la \'{u}ltima adoptando una estrategia de agrupación. A su vez \cite{Dethloff} propuso heurísticas constructivas basadas en la inserción factible de menor costo, sobrecarga y la capacidad residual. Por \'{u}ltimo, \cite{gts} propuso una metaheurística híbrida de b\'{u}squeda tabú con b\'{u}squeda local guiada que logró muy buenos resultados con respecto a otros en la literatura.\\
+
+El objetivo principal de este trabajo consiste en resolver VRPSPD por medio de diferentes metaheurísticas híbridas, con el propósito de comparar sus resultados y poder recomendar aquella que reporte la mejor calidad y tiempo de solución. \\
+
+%A su vez, este trabajo buscó mejorar los resultados de cada una de las metaheurísticas híbridas con respecto a los resultados de las metaheurísticas de referencia. 
+
+Se realizó una investigación sobre las metaheurísticas más utilizadas para resolver el problema. Se llevó a cabo un estudio comparativo respecto a la calidad y el tiempo  de solución. Del análisis de los resultados que surja de la comparción puede conducir a avances en la resolución a algunas de las variantes más complejas de VRP.\\
+
+De la investigación sobre metaheurísticas se escogieron seis, las cuales fueron implementatas y modificadas en algunos casos. Para cada metaheurística se determinaron los parámetros que más influyen en su comportamiento, los cuales  fueron entonados para lograr mejorar la calidad y tiempo de la solución. Se comparó el desempeño de las metaheurísticas implementadas con los resultados de los artículos relacionados para finalmente seleccionar la metaheurística que mejor resuelve el problema. Es importante destacar que las ejecuciones se realizaron con un conjunto de instancias del problema, ampliamente utilizado en la literatura. \\
+
+
+En el primer capítulo del proyecto se describe con detalle VRP y sus variantes, y específicamente, para VRPSPD, el modelo matemático. En el segundo capítulo se presenta una conceptualización, descripción  y clasificación teórica de las metaheurísticas utilizadas. En el tercer capítulo se describe el lenguaje de programación aplicado, los detalles de implementación de cada una de las heurísticas, metaheurísticas, metaheurísticas híbridas y la estructura de datos de representación de la solución. En el cuarto capítulo se detallan las pruebas experimentales y las tablas de comparación de los resultados obtenidos. Por último, se presentan las conclusiones y recomendaciones basadas en los resultados obtenidos.
+
+
+
+

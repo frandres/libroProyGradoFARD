@@ -1,0 +1,302 @@
+\chapter{Metaheurísticas} \label{chap:metaheuristicas}
+
+\section{Definición} \label{sect:definicion}
+
+Ya que el problema de enrutamiento de vehículos es un problema complejo, resolverlo exactamente implica un incremento exponencial del tiempo de cómputo a medida que las instancias aumentan de tamaño. Para problemas complejos usualmente se trata de conseguir una buena solución que tome un tiempo aceptable. Una forma de lograr esto es utilizando las denominadas \emph{metaheurísticas}. El objetivo de esta clase de algoritmos  es lograr un balance entre obtener buenos tiempos de ejecución y buenas soluciones a través de un proceso iterativo. La palabra \emph{heurística} proviene del griego $\varepsilon\upsilon\rho\iota\sigma\kappa\varepsilon\iota\nu$, que significa \emph{``hallar, encontrar''}. El prefijo \emph{meta} quiere decir \emph{``nivel superior''}. Juntas podrían interpretarse como `mejorar lo encontrado'.
+
+Las metaheurísticas son una familia de algoritmos aproximados de propósitos generales y no determinísticos que consiste de procesos iterativos que guían una heurística subordinada, realizando sobre el espacio de búsqueda exploración y explotación.
+\begin{itemize}
+\item \textbf{Exploración:} Busca en el espacio de soluciones lugares nunca antes visitados. 
+\item \textbf{Explotación:} Regresa a lugares del espacio de soluciones ya visitados para obtener soluciones anteriormente calificadas como buenas.
+\end{itemize}
+
+\section{Clasificación} \label{sect:clasificacion}
+Una metaheurística puede ser:
+
+\begin{itemize}
+\item \textbf{Constructiva:} Construye paso a paso una solución del problema, basándose en la mejor elección de cada iteración.
+\item \textbf{De trayectoria:} Parten de una solución inicial y la mejoran progresivamente hasta lograr el óptimo.
+\item \textbf{Poblacional:} Basado en conjunto de soluciones que evolucionan sobre el espacio de búsqueda.
+\end{itemize}
+
+\section{Metaheurísticas de interés} \label{sect:interes}
+
+A continuación una breve descripción de las metaheurísticas más relevantes para este trabajo.
+
+\subsection{Búsqueda Local} \label{subsect:ls}
+
+La \emph{búsqueda local} (LS por sus siglas en inglés de \emph{Local Search}) es uno de los métodos más empleados para resolver problemas complejos. Su orígen proviene del año 1950 donde fue utilizada por primera vez para resolver el problema TSP.\footnote{Siglas en inglés de Traveling Salesman Problem, problema en donde un vendedor debe visitar todos los clientes una única vez, reduciendo su desplazamiento al mínimo} 
+\\
+Como descrito en \cite{LocalSearchVNDDef} el algoritmo parte de una solución inicial, que se representa en la solución actual, de la cual se obtiene una vecindad parcial o completa de nuevas soluciones. A partir de esta vecindad se elige una nueva solución actual, siempre y cuando  la solución sea mejor que la solución actual de acuerdo a un criterio previamente establecido. Este proceso se repite hasta alcanzar un criterio de parada previamente definido. 
+
+El pseudocódigo general de LS se puede ver en el \textbf{Algoritmo~\ref{alg:LSS}}.
+
+\begin{code}[includerangemarker=false,frame=single,label=alg:LSS,caption=Pseudocódigo de Búsqueda Local,firstnumber=100, mathescape]
+$S_0$ := ConstruirSolucionInicial()
+$S_{actual}$ := $S_0$
+
+while ($\neg$criterio_parada) do
+	vecindad := ConstruirVecindad($S_{actual}$)
+	Seleccionar $S$ $\in$ vecindad | $S$ := Min{Costo($S$)}
+	if (Costo($S$) $<$ Costo($S_{actual}$))	
+		$S_{actual}$ := S
+	end if		
+end while
+
+$\textbf{return}$ $S_{actual}$
+\end{code}
+
+\subsection{Búsqueda Local Iterada} \label{subsect:ils}
+
+La \emph{búsqueda local iterada} (ILS por sus siglas en inglés de \textit{Iterated Local Search}) es una metaheurística de trayectoria que consiste en iterativamente perturbar la solución actual a la cual se le aplica una heurística de mejoramiento. Una perturbación consiste en aplicar un operador de manera aleatoria, obteniendo de esta forma una nueva solución. La fuerza de una perturbación se refiere al número de componentes de la solución que son modificadas, es importante destacar que si la perturbación es muy fuerte el ILS puede comportarse como si su solución actual fuera aleatoria, mientras que si la perturbación es muy leve la solución actual normalmente caerá de nuevo en el mismo óptimo local, dejando un espacio de diversificación muy limitado \cite{ILSDef}. 
+\\
+El pseudocódigo general de ILS se puede ver en el \textbf{Algoritmo~\ref{alg:ILS}}.
+
+\begin{code}[includerangemarker=false,frame=single,label=alg:ILS,caption=Pseudocódigo de Búsqueda Local Iterada,firstnumber=100, mathescape]
+$S_0$ := ConstruirSolucionInicial()
+$S_{mejor}$ := LocalSearch($S_0$)
+while ($\neg$criterio_parada) do
+
+	$S_{perturb}$ := Perturbar($S_{mejor}$)
+	$S_{actual}$ := LocalSearch($S_{perturb}$)
+
+	if(Costo($S_{mejor}$) $>$ Costo($S_{actual}$))		
+		$S_{mejor}$ := $S_{actual}$		
+	end if
+			
+end while
+
+$\textbf{return}$ $S_{mejor}$
+\end{code}
+
+\subsection{Búsqueda en Vecindades Variables} \label{subsect:vnd}
+
+La \emph{búsqueda en vecindades variables} (VNS por sus siglas \emph{Variable Neightborhood Search}) es una metaheurística de trayectoria que consiste en cambiar sistemáticamente de vecindad dentro de una búsqueda local, además de un método de perturbación para diversificar la solución. Una de sus variantes, VND (\emph{Variable Neightborhood Descent} o \emph{Búsqueda Descendente en Vecindades Variables}) se obtiene cuando los cambios de vecindarios son realizados de manera determinística. 
+\\
+El pseudocódigo general de VND se puede ver en el \textbf{Algoritmo~\ref{alg:VNS}} \cite{VNDDef}.
+
+\begin{code}[includerangemarker=false,frame=single,label=alg:VNS,caption=Pseudocódigo de Búsqueda Descendente en Vecindades Variables,firstnumber=100, mathescape]
+Seleccionar vecindades $N_{k}$ para 
+k := 1,...,$K_{max}$ 
+$S_0$ := ConstruirSolucionInicial()
+$S_{mejor}$ := $S_0$
+while ($\neg$criterio_parada) do
+    k := 1
+    while (k < $k_{max}$+1) do 
+    	$vecindad$ := ConstruirVecindadVND($N_{k}$,($S_{mejor}$))
+		Seleccionar $S_{actual}$ $\in$ $vecindad$ | $S_{actual}$ := Min{Costo($S_{actual}$)}	
+		if(Costo($S_{mejor}$) > Costo($S_{actual}$))		
+			$S_{mejor}$ := $S_{actual}$
+			k := 1
+		else
+		 k := k+1
+		end if 			
+	end while
+end while
+
+$\textbf{return}$ $S_{mejor}$
+\end{code}
+
+\subsection{Búsqueda Tabú} \label{subsect:ts}
+
+La \emph{búsqueda tabú} (TS por sus siglas en inglés de \emph{Tabu Search}) es una metaheurística de trayectoria propuesta por Fred Glover en 1986 \cite{tabusearch} con el objetivo de ayudar a la \emph{búsqueda local} a evitar el estancamiento en óptimos locales, permitiendo movimientos dentro del espacio de soluciones que no necesariamente impliquen un mejor valor de función objetivo que el valor actual.
+Para evitar el fenómeno cíclico de la búsqueda local y así impedir volver a visitar soluciones anteriormente visitadas, éstas se prohiben mediante la utilización de memoria a corto plazo, empleando la llamada \emph{lista tabú}, cuyo propósito es almacenar la historia reciente de la búsqueda. 
+Estas soluciones ya visitadas son declaradas \emph{tabú}, es decir, su posterior exploración está prohibida por un determinado número de iteraciones definidas por el valor de la \emph{tenencia tabú}. 
+
+Usualmente es impráctico guardar soluciones en la lista tabú por razones de uso excesivo de recursos. Por este motivo normalmente se guardan movimientos específicos entre soluciones permitiendo así un uso eficiente de recursos y buenos resultados.
+
+Suele ocurrir que la búsqueda tabú evite movimientos que dirijan a muy buenas soluciones como resultado de la utilización de la lista tabú, por lo que generalmente se define un \emph{criterio de aspiración}, que permite a la búsqueda ignorar el hecho de que una solución se encuentre en la lista tabú sólo si esa solución conlleva un valor de función objetivo mejor que el de la mejor solución encontrada hasta el momento.
+
+El pseudocódigo general de TS se puede ver en el \textbf{Algoritmo~\ref{alg:TS}}:
+
+\begin{code}[includerangemarker=false,frame=single,label=alg:TS,caption=Pseudocódigo de Búsqueda Tabú,firstnumber=100, mathescape]
+$S_0$ := ConstruirSolucionInicial()
+$S_{actual}$ := $S_0$
+$S_{mejor}$ := $S_0$
+$Lista\_Tabu$ := $\emptyset$
+
+while ($\neg$criterio_parada) do
+	$vecindad$ := ConstruirVecindad($S_{actual}$)
+	Seleccionar $S$ $\in$ $vecindad$ | $S$ = Min{Costo($S$)}
+	if (Costo($S$) < Costo($S_{mejor}$))	        // criterio de aspiracion
+		$S_{mejor}$ := $S$
+	else
+		if ($S$ $\in$ $Lista\_Tabu$)
+			Seleccionar $S$ $\in$ $vecindad$ | $S$ := Min{Costo($S$)} $\wedge$ $S$ $\notin$ $Lista\_Tabu$
+		end if
+	end if
+	$S_{actual}$ := $S$
+	Guardar $S_{actual}$ en $Lista\_Tabu$ y actualizar tenencia si necesario
+end while
+
+$\textbf{return}$ $S_{mejor}$
+\end{code}
+
+\subsection{Búsqueda Local Guiada} \label{subsect:gls}
+
+La \emph{búsqueda local guiada} (GLS por sus siglas en inglés de \emph{Guided Local Search}) es una metaheurística de trayectoria diseñada para guiar la \emph{búsqueda local} penalizando características no deseables de la solución actual, para así evitar el estacamiento en óptimos locales. Primeramente se definen las características de una solución candidata, cuando la búsqueda se atasca en un óptimo local las soluciones que posean  ciertas características consideradas no deseables son penalizadas. Usualmente, se utiliza una función de utilidad tal que la característica que maximice la función será penalizada. La característica penalizada y el número de veces que ha sido penalizada será almacenada de manera que en búsquedas posteriores el valor de la función objetivo se vea alterado. De esta manera, la búsqueda se concentra en explorar mayormente soluciones calificadas como deseables y permite prevenir que dirija todo su esfuerzo en explorar sólo una región del espacio de soluciones.
+
+El pseudocódigo general de GLS se puede ver en el \textbf{Algoritmo~\ref{alg:GLS}}:
+
+\begin{code}[includerangemarker=false,frame=single,label=alg:GLS,caption=Pseudocódigo de Búsqueda Local Guiada,firstnumber=100, mathescape]
+Funcion $U$
+Conjunto $C$
+
+$S_0$ := ConstruirSolucionInicial()
+$S_{actual}$ := $S_0$
+$S_{mejor}$ := $S_0$
+
+while ($\neg$criterio_parada) do
+	$S_{mejor}$ := LocalSearch($S_{actual}$)
+	Encontrar la caracteristica $C_i$ | $C_i$ = Max {$U(i)$}
+	Penalizar($C_i$)
+	$S_{actual}$ := $S_{mejor}$
+end while
+
+$\textbf{return}$ $S_{mejor}$
+\end{code}
+
+\subsection{Optimización Basada en Colonia de Hormigas} \label{subsect:aco}
+
+La \emph{optimización basada en colonia de hormigas} (ACO por sus siglas en inglés de \emph{Ant Colony Optimization}) es una metaheurística poblacional inspirada en los rastros de feromonas dejados por las hormigas al caminar y el comportamiento de ellas ante las feromonas. Estas feromonas son utilizadas por las hormigas como medio de comunicación con el fin de conseguir una forma óptima para llegar a la comida. Análogamente ACO está basado en la comunicación indirecta de las hormigas artificiales mediante los rastros de feromonas artificiales. 
+
+Se tiene un número fijo de hormigas, cada hormiga construye una solución propia basándose en información subyacente a caminos de feromonas dejados por otras hormigas. Si no existen feromonas en los caminos a tomar, se escoje un camino aleatorio. Si existen feromonas en los caminos a tomar, se elige probabilísticamente dependiendo de la cantidad de feromonas depositada en los caminos. Mientras más feromonas tenga un camino mayor probabilidad tiene de ser elegido. Cada hormiga deposita feromonas en su recorrido. 
+
+Para evitar que el flujo de hormigas se dirija siempre por el camino de más feromonas, acarreando un es\-tan\-ca\-mien\-to en un óptimo local, se define un factor de evaporación, que reduce la cantidad de  feromonas en los caminos cada cierta cantidad de iteraciones o cada cierto tiempo. De esta manera se explorará eficazmente el espacio de soluciones, logrando soluciones de calidad.
+
+El pseudocódigo general de ACO se puede ver en el \textbf{Algoritmo~\ref{alg:ACO}}:
+
+\begin{code}[includerangemarker=false,frame=single,label=alg:ACO,caption=Pseudocódigo de Optimización basada en Colonia de Hormigas,firstnumber=100, mathescape]
+hormiguero := CrearHormigas()
+InicializarFeromonas()
+$S_{mejor}$ := ConstruirSolucionInicial()
+
+while ($\neg$criterio_parada) do
+	$\textbf{foreach}$ $hormiga \in$ hormiguero do
+		$S_{actual}$ := ConstruirSolucion($hormiga$)
+		ActualizarFeromonas($S_{actual}$)
+		if (Costo($S_{actual}$) < Costo($S_{mejor}$))
+			$S_{mejor}$ := $S_{actual}$
+		end if
+	end $\textbf{foreach}$	
+	EvaporarFeromonas()
+end while
+
+$\textbf{return}$ $S_{mejor}$
+\end{code}
+
+\subsection{Optimización por Enjambre de Partículas} \label{subsect:pso}
+
+La \emph{optimización por enjambre de partículas} (PSO por sus siglas en inglés de \emph{Particle Swarm Optimization}) es una metaheurística poblacional inspirada en el comportamiento en grupo de enjambres. PSO imita los movimientos físicos individuales en los enjambres como método de búsqueda. 
+
+Un enjambre está compuesto por un número definido de partículas, las partículas tienen dos características esenciales: posición y  velocidad. La posición de una partícula representa una solución al problema, mientras que la velocidad representa la habilidad de la partícula  para cambiar de posición. Utilizando estos dos factores, se intenta encontrar la mejor posición posible dentro de un espacio de búsqueda, la  cual se espera represente una buena solución al problema.
+
+La velocidad de una partícula es constantemente actualizada basándose en tres términos: (1) Inercia, obliga a la partícula a moverse en la misma dirección. (2) Aprendizaje cognitivo, obliga a la partícula a moverse a la mejor posición encontrada hasta el momento por ella. (3) Aprendizaje social, obliga a la partícula a moverse a la mejor posición encontrada hasta el momento por todas las partículas del enjambre.
+La velocidad de cada partícula es influenciada por los factores cognitivos y sociales con el fin de dirigir el enjambre a encontrar mejores soluciones al problema. Además, se incluye un factor estocástico para evitar que todas las partículas con misma posición se muevan en las mismas direcciones y así explorar extensivamente el espacio de soluciones.
+
+El pseudocódigo general de PSO se puede ver en el \textbf{Algoritmo~\ref{alg:PSO}}:
+
+\begin{code}[includerangemarker=false,frame=single,label=alg:PSO,caption=Pseudocódigo de Optimización por Enjambre de Partículas,firstnumber=100, mathescape]
+$\emph{enjambre}$ := CrearEnjambre()
+InicializarPosiciones($\emph{enjambre}$)
+InicializarVelocidades($\emph{enjambre}$)
+while ($\neg$criterio_parada) do
+	$\textbf{foreach}$ $\emph{p}$ $\in$ $\emph{enjambre}$ do
+		ActualizarVelocidad($\emph{p}$)
+		ActualizarPosicion($\emph{p}$)
+		if (Costo($\emph{p}$) < MejorCosto($\emph{p}$))
+			ActualizarMejorCosto($\emph{p}$)
+		end if
+		if (Costo($\emph{p}$) < MejorCosto($\emph{enjambre}$))
+			mejor_particula := $\emph{p}$
+		end if
+	end $\textbf{foreach}$
+end while
+$S_{mejor}$ := ObtenerPosicion(mejor_particula)
+
+$\textbf{return}$ $S_{mejor}$
+\end{code}
+
+\subsection{Búsqueda en Dispersión} \label{subsect:sca}
+
+La \emph{búsqueda en dispersión} (SS por sus siglas en inglés de \emph{Scatter Search}) es una metaheurística poblacional la cual está diseñada para operar a través de un conjunto de soluciones, llamado conjunto de referencia, el cual está constituido por buenas soluciones obtenidas hasta el momento. Es importante destacar que una buena so\-lu\-ción puede ser considerada de esta forma tanto por su diversidad, como por el valor de su función objetivo. Este enfoque genera sistemáticamente nuevas soluciones a partir del conjunto de referencia a través de combinaciones de soluciones pertenecientes al mismo.    
+\\
+El algoritmo básico SS consta de cinco métodos:
+\\
+\begin{enumerate}
+ 
+\item Un \textit{Método de generación diversificada} que crea un conjunto de soluciones iniciales.
+
+\item Un \textit{Método de mejora} que mejora la calidad de las soluciones.
+
+\item Un \textit{Método de actualización del conjunto de referencia} que construye el conjunto de referencia con soluciones buenas y diversas.
+
+\item Un \textit{Método de generación de subconjuntos} que determina cuales soluciones del conjunto de referencia sirven como base para la creación de nuevas soluciones.
+
+\item Un \textit{Método de combinación de soluciones} que genera nuevas soluciones a partir de los subconjuntos creados por el método de generación de subconjuntos.
+
+\end{enumerate}
+
+El pseudocódigo general de SS se puede ver en el \textbf{Algoritmo~\ref{alg:SCA1}}
+
+\begin{code}[includerangemarker=false,frame=single,label=alg:SCA1,caption=Pseudocódigo de Búsqueda en Dispersión,firstnumber=100, mathescape]
+$Metodo$ $de$ $Generacion$ $y$ $Diversificacion$ - Crea un conjunto de soluciones diversas $P$ de tamano $Psize$
+
+Construir el $RefSet$ con $b$ mejores y diversas soluciones de $P$, RefSet := $\lbrace S^1,...,S^b \rbrace$. Ordenarlas de manera creciente en base a su costo.  
+
+$S_{mejor}$ := $S^1$
+$NewSolutions$ := True
+while ($NewSolutions$) do
+	$NewSubset$ := GenerarSubconjuntos($RefSet$)
+	$NewSolutions$ := False
+    while ($NewSubset\neq\emptyset $) do
+    	$Ss$ := Seleccionar($NewSubset$)
+    	$S$ := Combinar(Ss) 
+    	$x$ := Mejorar(S)
+		if(($x$ $\notin$ $RefSet$) $\wedge$ ($Costo(x)<Costo(S^b$)))
+			$S^b$ := $x$
+			Ordenar($RefSet$)
+			$NewSolutions$ := True											
+		end if
+		Eliminar($Ss$, $NewSubset$)    	    				
+	end while
+end while
+$S_{mejor}$ := $S^1$
+
+$\textbf{return}$ $S_{mejor}$
+\end{code}
+
+
+\subsection{Algoritmo Genético} \label{subsect:GA}
+
+El \emph{algoritmo genético} (GA por sus siglas en inglés de \emph{Genetic Algorithm}) es una metaheurística poblacional utilizada por primera vez por John Holland en el año 1975. El enfoque de GA representa una analogía biológica en donde se simula el proceso evolutivo de una \textit{población} que refiere a un conjunto donde cada individuo representa una solución del problema. 
+
+Cada solución perteneciente a la \textit{población} posee un valor asociado que recibe el nombre de \textit{fitness}. Éste determina si una solución es considerada como buena o no y aquellas que tengan mayor \textit{fitness} tendrán mayor oportunidad para aparearse y sobrevivir al paso del tiempo, lo cual permite que la población evolucione y obtenga cada vez mejores soluciones. Lo población inicial es generada de manera aleatoria, luego el algoritmo posee tres procedimientos fundamentales:
+
+\begin{enumerate}
+ 
+\item\textit{Selección:} Se encarga de elegir un subconjunto de la población, tal que las soluciones de mayor \textit{fitness} o calidad tengan mayor oportunidad de reproducirse. 
+
+\item\textit{Cruce:} Se encarga de simular la reproducción de dos soluciones dentro de la población, las cuales para el efecto del GA serán llamadas ``padres''. El cruce da como resultado una o más soluciones que poseen características en común de ambos padres. Estas soluciones reciben el nombre de ``hijos'' para efectos del GA.
+
+\item\textit{Mutación:} realiza una leve modificación de las características de una solución. Este proceso se utiliza para diversificar una nueva población sin necesidad de depender exclusivamente del proceso de cruce. 
+
+\end{enumerate}
+
+El pseudocódigo general de GA se puede ver en el \textbf{Algoritmo~\ref{alg:GA}}.
+ 
+\begin{code}[includerangemarker=false,frame=single,label=alg:GA,caption=Pseudocódigo de Algoritmo Genético,firstnumber=100, mathescape]
+t := 0
+$P_0$ := GenerarPoblacionInicial()
+Evaluar($P_t$)
+while ($\neg$criterio_parada) do
+	t := t+1
+	$P_t$ := Seleccionar($P_{t-1}$)
+	Cruzar($P_{t}$)
+	Mutar($P_t$)
+	Evaluar($P_t$)	
+end while
+$S$ := SeleccionarMejor($P_t$)
+
+$\textbf{return}$ $S$
+\end{code}

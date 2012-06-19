@@ -1,0 +1,189 @@
+% Marco Teorico.
+\chapter{El Problema de Enrutamiento de Vehículos} \label{chap:vrp}
+
+
+La distribución de bienes es una tarea fundamental hoy en día para muchas empresas y organizaciones. Pro\-ble\-mas como conseguir la distancia más corta entre dos establecimientos, satisfacer demandas de clientes y mejorar el tiempo de la entrega son factores que influyen en el costo final de un servicio. Teniendo en cuenta lo importante que es la distribución para muchos aspectos en la sociedad los investigadores han estudiado formas de reducir los costos, haciendo la distribución más eficiente. El Problema de Enrutamiento de Vehículos (\textbf{VRP} por sus siglas en inglés de Vehicle Routing Problem) encapsula las restricciones y definiciones de la distribución de bienes en su forma más general. El problema fue propuesto originalmente por Dantzig y Ramser en 1959 \cite{primervrp} mientras intentaban encontrar maneras más eficientes de entregar gasolina a estaciones de servicio utilizando camiones como medio de transporte. \\
+
+VRP está formado de los siguientes elementos:
+\begin{itemize}
+	
+	\item Un depósito que almacena los bienes.
+	\item Un conjunto de clientes que demandan una cantidad exacta de bienes.
+	\item Un conjunto de vehículos cuyo objetivo es transportar los bienes entre el depósito y los clientes.
+
+\end{itemize}
+
+La resolución exacta del problema es encontrar las rutas que deben recorrer los vehículos para satisfacer las demandas de los clientes de tal manera de minimizar el costo (o distancia) de las rutas.
+
+\section{Descripción} \label{sect:descripcion}
+
+Se tiene un depósito que contiene una cantidad finita de bienes, los cuales se deben distribuir utilizando una cantidad de vehículos. Éstos deben recorrer los clientes satisfaciendo sus demandas de productos cumpliendo las siguientes restricciones:
+
+\begin{itemize}
+
+	\item Todos los vehículos deben comenzar su recorrido en el depósito y teminar en el depósito.
+	\item Cada cliente debe ser visitado exactamente por un sólo vehículo una única vez.
+	\item Se deben satisfacer las demandas de todos los clientes en su totalidad.
+	
+\end{itemize}
+
+La resolución del problema consiste en minimizar el costo total de todos los recorridos de los vehículos cum\-plien\-do las restricciones mencionadas anteriormente. \\
+
+
+VRP pertenece al conjunto de problemas \textit{NP-Hard
+}\footnote{NP-hard: una clase de problemas de decisión que pueden ser resueltos por una máquina de turing no determinista en tiempo polinomial.}. Debido a esto, la utilización de métodos exactos resulta inconveniente para resolver el problema, ya que su tiempo de resolución incrementa de forma exponencial a medida de que las instancias aumentan de tamaño (número de clientes). Generalmente para resolver este tipo de problemas se utilizan algoritmos que logran resultados aproximados de buena calidad con tiempos reducidos. Estos algoritmos son llamados metaheurísticas y han demostrado ser de gran ayuda, siendo así un área de investigación de gran interés dentro de la computación.
+
+Más adelante se describirán las metaheurísticas utilizadas.
+
+\begin{comment}
+\section{Formulación} \label{sect:formulacion}
+
+VRP puede ser definido formalmente utilizando la formulación propuesta por Level y Palhazi\cite{tesisdanielernesto}: \\
+
+Usualmente el problema es modelado utilizando un grafo, donde los vértices representan los clientes (incluyendo el depósito) y los arcos llevan asociados un costo (que usualmente es visto como la distancia entre dos puntos).
+
+Sean $n$ el número de clientes, $k$ el número de vehículos disponibles y $G = (V, E)$ un grafo completo donde $V = \{0,1,...,n\}$ es el conjunto de vértices y $E = \{(i,j)|(i,j) \in V \times V \ \wedge \ i \not= j\}$ es el conjunto de arcos. El vértice $0$ representa al depósito y los vértices $q = 1,2,...,n$ corresponden a los clientes que deben ser suplidos. Los arcos representan los costos de los caminos que puede utilizar la red de transporte.
+
+Una solución esta formada por una conjunto de rutas $R = \{r_1,r_2,...,r_k\}$, las cuales deben cumplir las siguientes condiciones:
+
+\begin{itemize}
+
+	\item Cada ruta $r_i \in R$ debe iniciar y terminar en el depósito.
+	\item Cada vértice $v_i \in V - \{0\}$ debe ser visitado una y sólo una vez.
+
+\end{itemize}
+\end{comment}
+
+
+\section{Variantes de VRP} \label{sect:variantes}
+
+En la vida real muchos problemas de distribución han tratado de modelarse utilizando VRP, sin embargo resulta complejo, por lo que ha surgido la necesidad de crear nuevas formas de modelado más específicas de acuerdo a cada tipo de problema, en algunos casos agregando restricciones y en otros relajando algunas de ellas. Estas nuevas formas de modelado son llamadas variantes. A continuación se mencionan algunas:
+
+El Problema de Enrutamiento de Vehículos con Capacidad (CVRP por sus siglas en inglés de Capacited Vehicle Routing Problem) se define por contar con una flota de vehículos homogéneos que poseen una capacidad máxima fija. Este elemento adicional crea una nueva restricción al problema: no permitir que los bienes dentro del vehículo excedan su capacidad máxima en ningún momento.
+
+En el \vrp con Ventanas de Tiempo (VRPTW por sus siglas en inglés de \vrpingles with Time Windows) se define para cada cliente un rango de tiempo o \emph{ventana de tiempo}, durante el cual debe ser atendido por algún vehículo. Por lo tanto un vehículo puede atender a un cliente si y sólo si el vehículo llega al cliente dentro su ventana de tiempo.
+
+El \vrp con Recolección (VRPB por sus siglas en inglés de Vehicle Routing Problem with Backhauls) requiere que los clientes se clasifiquen en dos conjuntos disjuntos: clientes que reciben bienes del depósito (llamados consumidores o \textit{linehauls}) y clientes que entregan bienes al depósito (llamados pro\-ve\-e\-do\-res o \textit{backhauls}). En esta variante se requiere que los consumidores sean atendidos antes que los proveedores, permitiendo así asegurar que los vehículos nunca superen su capacidad máxima, entregando todo lo que necesitan entregar antes de recoger nuevos bienes.
+
+El \vrp Estocástico (SVRP por sus siglas en inglés de Stochastic Vehicle Routing Problem) se caracteriza por poseer uno o varios componentes aleatorios. Podrían haber nuevos clientes durante la ejecución, las demandas podrían ser aleatorias y conocidas sólo al momento de que un vehículo llegue al cliente.
+
+%El \vrp Dinámico (DVRP por las siglas en inglés de Dynamic Vehicle Routing Problem) es una variante compleja ya que  mientras se construye la ruta aún no se sabe información completa de las demandas de ciertos clientes. Además, luego de construidas las rutas la información de las demandas podría cambiar dinámicamente, por lo tanto mientras los vehículos se desplazan podría haber cambios que influyan positivamente o negativamente en el costo total de las rutas. 
+
+El Problema de Enrutamiento de Vehículos con Múltiples Depósitos (VRPMD por sus siglas en inglés de \vrpingles with Multiple Depots) agrega depósitos adicionales al problema general. Por lo tanto una flota de vehículos distinta se encarga de atender a los clientes.
+
+El Problema de Enrutamiento de Vehículos con Múltiples Vehículos (VRPMV por las siglas en inglés de Vehicle Routing Problem with Multiple Vehicles) tiene como elemento clave que la distribución de los bienes no esté limitada a un sólo vehículo por cliente, ya que en algunas situaciones la demanda de bienes de parte de un cliente es mayor a la capacidad máxima del vehículo. Elimina la restricción de que un cliente sea atendido por sólo un vehículo.
+
+A continuación se pasa a describir una variante de particular interés de este proyecto, como lo es VRPSPD.
+
+%\section{Aplicaciones de VRP} \label{sect:aplicaciones}
+%
+%En los sectores productivos es muy común observar la necesidad de distribuir bienes, así como recolectar materiales. Cada día aumenta más la cantidad de clientes en una cadena de distribución, por lo que ha sido necesario desarrollar formas más eficientes de realizar entregas y recolecciones óptimas con el fin de disminuir los costos. El \vrp se ha investigado con mucho hincapié para resolver este problema. La utilización de algoritmos computacionales ha resultado, a medida que se profundizan las investigaciones, beneficiosa para reducir los costes de distribución en las organizaciones.
+%
+%VRP ha sido modelado matemáticamente con el objetivo de que pueda ser representado computacionalmente. Esta representación ha llevado a muchas empresas e industrias a llevar a cabo implementaciones en máquina que resuelvan VRP y así contribuir a minimizar los costos de distribución. Algunas aplicaciones fueron implementadas por algunos investigadores:
+%
+%\begin{description}
+%\item[Golden y Wasil\cite{aplicacionvrp1}: ] Utilizaron un software para optimizar la distribución de la industria de bebidas. Tanto de ventas preordenadas por los clientes, como entrega de bebidas compradas por los clientes al conductor del vehículo. Estudios concluyeron en que en Estados Unidos el 49.8\% de las ventas fueron realizadas directamente por el chofer, lo que implica que los costos asociados a la distribución de las bebidas eran enormes. Se realizaron implementaciones de tres casos de estudio, buscando reducir los costos en un 2-5\%.
+%\item[Evans y Norback\cite{aplicacionvrp2}: ] Implementaron un programa para reducir los costos de distribución de alimentos en la empresa Kraft Inc. Utilizaron un sistema basado en heurísticas utilizando gráficos de computadora para ilustrar las largas rutas de su cadena de distribución. En pruebas, el personal de Kraft logró reducir los costos operativos en 10.7\% en problemas de hasta 223 paradas en clientes.
+%
+%\end{desocription}
+\section{VRP con Recepción y Entrega Simultánea (VRPSPD)} \label{sect:vrpspd}
+
+El \vrpspd (VRPSPD por sus siglas en inglés de Vehicle Routing Problem with Simultaneous Pickup and Delivery) fue abordado por primera vez por Min \cite{primervrpspd} en el año 1989. En esta variante los clientes pueden, de manera simultánea, recibir y entregar bienes. Por lo tanto, cada cliente tiene asociado una cantidad de bienes por recibir y por entregar. 
+
+\subsection{Modelo Matemático} \label{subsect:vrpspdFor}
+
+\subsubsection{Características del Problema}
+
+\begin{itemize}
+\item Las demandas de entrega y recepción de bienes son determinísticas.
+\item Las demandas de recepción son atendidas exclusivamente desde el depósito.
+\item No hay intercambio de bienes entre clientes.
+\item Las demandas de entrega y recepción de bienes no pueden ser divididas.
+\item Todo cliente es visitado una sola vez.
+\item No hay restricción de distancia máxima recorrida para los vehículos.
+
+\end{itemize}
+
+\subsubsection{Notación}
+
+\begin{tabular}{ll}
+{$n:\,$} 		& {Número total de clientes.}  \\ 
+{$Q:\,$} 		& {Capacidad de los vehículos.} \\ 
+{$k:\,$}  		& {Número de vehículos.}\\
+{$i,j:\,$}		& {Índices para el deposito y los clientes. El depósito se denota con el número 0.}\\
+{$l:\,$}    	& {Índice para los vehículos.}\\
+{$c_{ij}:\,$} 	& {Distancia (costo) entre el cliente $i$ y el cliente $j$.}\\
+{$p_j:\,$}		& {Bienes a ser entregados por un cliente $j$, donde $j=1,2,…,n$.}	\\	
+{$d_j:\,$}		& {Bienes a ser recogidos por un cliente $j$, donde $j=1,2,…,n$.} \\
+{$x_{ijl}$} 	& {Variable de decisión que toma el valor de 1 si el vehículo $l$ visita al cliente $i$ antes } \\
+{$ $}              & {que al cliente $j$, de lo contrario es 0.} \\
+{$y_{ij}$} 		& {Bienes recogidos hasta el cliente $i$ y transportados hasta el cliente $j$.} \\
+{$z_{ij}$}		& {Bienes por entregar desde el cliente $i$ y transportados hasta el cliente $j$.}\\
+
+\end{tabular} 
+
+\subsubsection{Formulación Matemática}
+
+La función objetivo ~\eqref{eq:FOBJ} correspondiente a esta formulación matemática es la siguiente: 
+
+
+\begin{equation}\label{eq:FOBJ}
+ Min \sum_{l=1}^k\sum_{i=0}^n\sum_{j=0}^n  c_{ij} x_{ijl} 
+\end{equation}
+
+Sujeto a:
+
+\begin{equation}\label{eq:FM1}
+\sum_{i=0}^n \sum_{l=1}^k x_{ijl}=1 , \: j=1,2,…,n 
+\end{equation}
+
+
+	La restricción ~\eqref{eq:FM1} asegura que cada cliente es visitado exactamente una vez por un sólo vehículo.
+
+
+\begin{equation}\label{eq:Ft2}
+\sum_{i=0}^n x_{ijl} - \sum_{i=0}^n x_{jil} = 0, \: j=0,1,…,n, l=1,2,…,k  
+\end{equation}	
+	
+	La restricción ~\eqref{eq:Ft2} asegura que el mismo vehículo entra y sale de cada cliente que visita.
+
+
+\begin{equation}\label{eq:FM3}
+\sum_{j=1}^n x_{0jl} \leq 1 , \: l=1,2,…,k   
+\end{equation}
+
+	La restricción ~\eqref{eq:FM3} representa que la cantidad de vehículos utilizados es menor o igual que  $k$. 
+
+
+
+\begin{equation}\label{eq:FM4}
+\sum_{i=0}^n y_{ji} - \sum_{i=0}^n y_{ij} = p_j, \: \forall j \neq 0  
+\end{equation}
+
+\begin{equation}\label{eq:FM5}
+\sum_{i=0}^n z_{ji} - \sum_{i=0}^n z_{ij} = d_j, \: \forall j \neq 0  
+\end{equation}
+
+
+Las restricciones ~\eqref{eq:FM4} y ~\eqref{eq:FM5} son ecuaciones de flujo para la demanda de recepción y de entrega de mercancía.
+
+
+\begin{equation}\label{eq:FM6}
+(y_{ij}+ z_{ij})  \leq Q \sum_{l=1}^k x_{ijl}   , \: i,j=0,1,…,n  
+\end{equation}
+
+La restricción ~\eqref{eq:FM6} establece que los bienes  de recepción y de entrega solo pueden ser transportados por arcos pertenecientes a la solución y para ninguno de ellos se excede de la máxima capacidad permitida.
+
+\begin{equation}\label{eq:FM7}
+x_{ijl}\in \lbrace0,1\rbrace,  y_{ij} \geq 0 ,z_{ij} \geq 0,   i,j=0,1,…,n,   l=0,1,…,k     
+\end{equation}		
+
+		Finalmente  la restricción ~\eqref{eq:FM7} muestra la naturaleza de las variables de decisión.
+
+%	Existen  $k$ vehículos en el depósito, V representa al conjunto de clientes que serán visitados, donde $n = |V|$ es el número total de clientes. La ubicación del depósito y los clientes es conocida.  Todo cliente posee una cantidad conocida de mercancía demandada y de mercancía a devolver, representadas por $d_j$   y $p_j$ respectivamente con valores desde $j=1,2,…,n$.  Toda ruta debe comenzar en el depósito y debe terminar en el mismo. Todos los clientes son visitados exactamente una vez y sus necesidades son satisfechas por un solo vehículo. $V_0 = V \cup {0}$  , es el conjunto de clientes más el depósito; $c_{ij}$ es la distancia entre el cliente $i$ y el cliente $j$, y la capacidad del vehículo es representada por $Q$. $x_{ijl}$ representa la variable de decisión que toma el valor de 1 si el vehículo $l$ visita visita al cliente $i$ antes que al cliente $j$, de lo contrario es 0. $y_{ij}$  representa los bienes recogidos hasta el cliente $i$ y transportados hasta el cliente $j$. $z_{ij}$ Representa los bienes por entregar desde el cliente $i$ y transportados hasta el cliente $j$.
+
+
+%Puedes quitar esto(es opcional)
+\vspace{5 mm}
+
+

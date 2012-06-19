@@ -1,0 +1,12 @@
+
+Intro: planteamiento breve.
+
+Planteamiento del problema.
+
+Marco Teórico: artículos Focused search on the web using Sequel. Explicar qué es DIA.
+
+
+
+Implementación: librerías.
+
+Exp regulares.

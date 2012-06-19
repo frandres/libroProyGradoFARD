@@ -1,0 +1,20 @@
+% Conclusiones
+\chapter*{Conclusiones y recomendaciones} \label{chap:conclusiones}
+\addcontentsline{toc}{chapter}{Conclusiones y recomendaciones}
+
+En este capítulo se presentan los hallazgos y contribuciones de este trabajo y se dan algunas recomendaciones.\\
+
+Seis metaheurísticas del estado del arte fueron estudiadas y posteriormente implementadas para la resolución del Problema de Enrutamiento de Vehículos con Entrega y Recepción Simultánea. 
+Se probaron para los dos tipos de instancias Dethloff y SalhiNagy, y se realizó un estudio comparativo con las metaheurísticas afines.
+
+Para instancias Dethloff la metaheurística implementada GTS-M dió resultados aproximados a los mejores re\-por\-ta\-dos hasta el momento, reduciendo los tiempos de ejecución a un poco menos de la mitad. La metaheurística ILS-VND-M no logró superar los resultados publicados en el trabajo referenciado. La metaheurística GTS-M es altamente recomendada por su calidad de solución y menor tiempo.
+
+Para instancias SalhiNagy las implementaciones de metaheurísticas de trayectoria (ILS-VND-M y GTS-M)  no lograron superar los resultados publicados en los trabajos afines. Esto puede deberse a una falta de mejor entonación de los parámetros de las metaheurísticas. La implementación de SS-M tampoco logró superar los resultados de su afín. La metaheurística implementada que generó mejores resultados fue AS-M, sin embargo consume casi cuatro veces el tiempo de ejecución de la metaheurística con mejores resultados (GTS). De las metaheurísticas implementadas AS-M es recomendada por sus resultados a\-proxi\-ma\-dos de calidad y tiempo.
+
+Independientemente del tipo de instancia utilizada, las metaheurísticas de trayectoria presentan mejor comportamiento que las poblacionales.\\
+
+Cada una de las metaheurísticas implementadas se hibridó con VND. El aporte de VND fue fundamental para lograr un mejoramiento de las metaheurísticas implementadas con respecto a los trabajos referenciados. La hibridación sirvió para mejorar los mejores costos promedio en la mayoría de los casos.\\
+
+La entonación de los parámetros de las metaheurísticas es un proceso de vital importancia ya que de ella depende en gran medida la calidad de las soluciones encontradas. Los muestreos realizados fueron de ayuda para encontrar aquellos parámetros que influyan más en la calidad de las soluciones, así como para acotar los rangos de cada uno de los parámetros. Más adelante, las pruebas de entonación de parámetros lograron conseguir los valores de los parámetros que generaban, en promedio, las mejores soluciones.\\
+
+En trabajos futuros se recomienda realizar de forma más exhaustiva la entonación de parámetros, realizando análisis de varianza a todos los parámetros, ya que el muestreo de los parámetros da como resultado sólo un estimador de la influencia de estos parámetros en el comportamiento de la metaheurística y no es una forma certera de conseguir los parámetros más influyentes, así como los rangos de entonación a utilizar. Adicionalmente, se recomienda la ejecución de las metaheurísticas utilizando otras clases de instancia, para de esta manera, asegurar el buen comportamiento de las metaheurísticas en la resolución de VRPSPD en casos de la vida real.
