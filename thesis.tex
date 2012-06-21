@@ -235,8 +235,8 @@
 \clearpage
 
 % Crea la lista de algoritmos
-\lstlistoflistings
-\clearpage
+%\lstlistoflistings
+%\clearpage
 
 
 % Crea la lista de codigos fuentes
@@ -261,9 +261,12 @@
 % Incluye los archivos deseados - El contenido de
 % su proyecto de grado/pasantia larga.
 \input{introduccion.tex}
-\input{vrp.tex}
-\input{metaheuristicas.tex}
+\input{planteamientoProblema.tex}
+\input{marcoTeorico.tex}
+\input{analisisFuenteIncompletitud.tex}
+\input{diseno.tex}
 \input{implementacion.tex}
+\input{pruebas.tex}
 \input{resultados.tex}
 \input{conclusiones.tex}
 
@@ -274,14 +277,14 @@
 % Crea el glosario 
 \printglossaries
 
-% Establece las citas y bibliografia
+% Establece las citas y bibliografia ieee.bst
 \bibliographystyle{alpha.bst}
 \bibliography{myrefs}
 
 % Crea el apendice
-\appendix
-\input{apendiceA.tex}
-\input{apendiceB.tex}
-\input{apendiceC.tex}
+%\appendix
+%\input{apendiceA.tex}
+%\input{apendiceB.tex}
+%\input{apendiceC.tex}
 
 \end{document}
