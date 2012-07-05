@@ -4,5 +4,38 @@
 
 \subsection{Lenguaje de programación} \label{sect:implementacion-lenguaje}
 
-El lenguaje de programación utilizado para la implementación de las seis metaheurísticas fue Java, compilado usando g++ en su versión 
-1.6.0\_20.
+El lenguaje de programación utilizado para la implementación del sistema de Extracción Focalizada de Información fue Java en su versión 1.6.0\_20. \\
+
+\subsection{Librerías utilizadas} \label{sect:implementacion-librerias}
+
+<Para parsear las consultas, se trabajó con las librerías elaboradas por Andueza y Arteta (año) en su proyecto de Grado (referenciar). Hablar aqui de ellas.>
+
+Se utilizaron ademas las siguientes librerías Open Source según la necesidad listada a continuación: \\ 
+
+\begin{itemize}
+\item Para desplegar mensajes de traza y errores se utilizó la librería Log4J. Dicha librería permite en lugar de imprimir mensajes por el Standard Output, imprimir mensajes dependiendo de un nivel de desarrollo espeficiado en un archivo de configuración. A la hora de desplegar un mensaje se elige un nivel de desarrolo: traza, error, error fatal, warning, entre otros. Luego con modificar el archivo de configuración de la librería se puede fácilmente apagar y prender los niveles para que se impriman o dejen de imprimir algunos mensajes. Se utilizó la version 1.2.16.
+\item Para procesar archivos PDF se utilizó la librería Jericho y Tika, en sus versiones 1.6 y 1.1.
+\item Para procesar archivos HTML se utilizó la librería Jericho, en su versión 3.2.
+\item Para procesar archivos .doc se utilizó la librería POI, en su versión 3.8.
+\item Para leer archivos de configuración de XML se utilizó la librería que ofrece Java para parsear y consultar XML, JAXP, en su versión 1.4.
+
+\end{itemize}
+
+
+\section{Implementación del Módulo de Búsqueda Focalizada de Información (MBFI)}\label{sect:implementacion-MBFI}
+
+Como se ha explicado, el Módulo de Búsqueda Focalizada de Información (MBFI) es el módulo que encuentra los valores de los campos cuyos valores son desconocidos o incompletos para una consulta dada. Estos valores son buscados en un conjunto de documentos definidos por el usuario y se encuentran tomando en cuenta un contexto de extracción que contiene información útil para la búsqueda. El MBFI tiene dos componentes: un preprocesador de texto y un extractor focalizado de información. \\
+
+En grandes rasgos, el funcionamiento y la implementación de ambos componentes son bastantes similares. Ambos componentes operan como extractores de texto utilizando expresiones regulares definidas previamente por un usuario experto. Dichas expresiones regulares funcionan como delimitadores del fragmento de texto que interesa según la tarea que se esté realizando: en el caso del preprocesador de texto, el objetivo es extraer el fragmento de texto que está relacionados con el dominio sobre el cuál se realiza la extracción focalizada; el extractor focalizado busca encontrar el valor del campo faltante para responder una consulta. \\
+
+Ambos componentes están hechos para trabajar con un archivo de configuración en XML que especifica los parámetros necesarios para realizar el preprocesamiento y la extracción. En particular los parámetros que se guardan en estos archivos de configuración incluyen las expresiones regulares, las rutas de directorio de los archivos de entrada, la ruta de los archivos de salida para el caso del preprocesador, entre otras cosas. De esta manera, el usuario del sistema debe preocuparse tan sólo por entender cómo realizar un archivo de configuración para cada uno de los dominios necesarios. 
+
+Más adelante se expondrán algunas consideraciones sobre las expresiones regulares de interés para el entendimiento de la implementación del MBFI. \\
+
+Ahondando más en el componente de pre-procesamiento, su objetivo como se ha dicho es extraer de cada documento el conjunto de fragmentos que está relacionado con el dominio sobre el cual se hace la búsqueda focalizada. En tal sentido tiene como entrada un conjunto de documentos en su formato original (PDF, Portable Readable Document; HTML , Hyper Text Markup Language; DOC y DOCX, archivos de Microsoft Word; entre otros) y un archivo de configuración. Su salida es un archivo .txt en el cual se tiene el conjunto de fragmentos que están relacionados con el dominio en cuestión según lo especificado por las expresiones regulares. Para procesar los documentos se utilizaron las librerías descritas anteriormente. 
+
+En cuanto al componente de extracción focalizada. BLA BLA
+
+Diagrama de fases describiendo el flujo de documentos de un dominio goes here.
+
+\subsection{Diseño de las expresiones regulares para la configuración del Preprocesador de textos y del Extractor Focalizado}\label{sect:implementacion-regexp}
