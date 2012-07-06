@@ -1,0 +1,63 @@
+\chapter{Ejemplos de archivos de configuración XML de Preprocesador de Texto y Extractor Focalizado}\label{chap:apendiceA}
+
+A continuación se presentan dos archivo de configuración del Preprocesador de Texto y del Extractor Focalizado del Módulo de Búsqueda Focalizada. 
+
+\begin{code}[includerangemarker=false,frame=single,label=xml:Preprocesador,caption=Archivo de configuración del Preprocesador de Texto con Dominio Designaciones,firstnumber=0, mathescape]
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Filesources>
+
+	<Filesource>
+	
+  		<Name>Designaciones</Name>
+  		
+        <InputFilePath>/home/frandres/Eclipse/workspace/ExtractionModule/tests/Designaciones/rawDocuments/</InputFilePath>
+        
+        <OutputFilePath>/home/frandres/Eclipse/workspace/ExtractionModule/tests/Designaciones/preProcessedDocuments/</OutputFilePath>
+        
+        <RegExps>
+        
+            <RegExp>
+        		<Priority>1</Priority>
+       		<String>De acuerdo al numeral 7 del articulo 16(.*?)[\^0-9 ][23(?:IV)(?:III)(?:II)][\.\t].*</String>
+        	</RegExp>
+        	
+        	<RegExp>
+        		<Priority>2</Priority>
+        		<String>.*(?:[Ii][Nn][Ff][Oo][Rr][Mm][Ee] [Dd][Ee][Ll] [Rr][Ee][Cc][Tt][Oo][Rr]).*?([Dd][Ee][Ss][Ii][Gg][Nn][Aa][Cc][Ii][Oo\u00f3][Nn](?:[Ee][Ss]){0,1}.*?)[^0-9 ][23(?:IV)(?:III)(?:II)][\.\t].*</String>
+        	</RegExp>     
+        	   	
+        </RegExps>
+        
+        <readAllFiles>1</readAllFiles>
+        
+        <outputExtension>.txt</outputExtension>   
+        
+	</Filesource>
+</Filesources>  
+\end{code}
+
+\begin{code}[includerangemarker=false,frame=single,label=xml:Preprocesador,caption=Fragmento del Archivo de configuración del Extractor Focalizado de Texto con Dominio Designaciones,firstnumber=0]
+<Configuration>
+	<UnitRegExp>^(.+?)$</UnitRegExp>
+	<MinimumHitRatio>.5</MinimumHitRatio>
+	<DocumentsFilePath>/home/frandres/Eclipse/workspace/ExtractionModule/tests/Designaciones/preProcessedDocuments/</DocumentsFilePath>
+	<FieldDescriptors>
+
+		<FieldDescriptor>
+			<FieldName>EsAsignado.calificacion</FieldName>
+			<SpecificRegExps>
+	             <SpecificRegExp priority="1"  >([Jj]ef.*?)(?:(?:a\s+partir\s+del{0,1}\s)|(?:desde)|(?:hasta)|(?:por motivo)|(?:en sustitu)|(?:del\s\d)|(?:al\s\d)|(?:\s+entre\s+el\s+\d)|(?:por\s+el\s+periodo\s+)).*</SpecificRegExp>
+				<SpecificRegExp priority="2" >([Cc]oordinador.*?)(?:(?:a\s+partir\s+del{0,1}\s)|(?:desde)|(?:hasta)|(?:por motivo)|(?:en sustitu)|(?:del\s\d)|(?:al\s\d)|(?:\s+entre\s+el\s+\d)|(?:por\s+el\s+periodo\s+)).*</SpecificRegExp>
+
+				<SpecificRegExp priority="13"  >([Jj]ef.*)</SpecificRegExp>
+				<SpecificRegExp priority="14" >([Cc]oordinador.*)</SpecificRegExp>
+				
+			</SpecificRegExps>
+			<Weight>1</Weight>
+			<isDate>0</isDate>
+		</FieldDescriptor>	
+	</FieldDescriptors>
+
+</Configuration>
+\end{code}

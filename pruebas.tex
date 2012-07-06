@@ -1,18 +1,30 @@
 \chapter{Pruebas} \label{chap:pruebas}
 
-Descripción del conjunto de pruebas < Hablar de los dominios: se trabajó sobre designaciones, etc>\\
+\section{Consideraciones Generales} 
 
-Duda: esto es una especie de marco metodológico?\\
+Con el objetivo de realizar las pruebas sobre el sistema se trabajó como ya se ha dicho sobre tres dominios relacionados con el funcionamiento interno de la Universidad Simón Bolívar: las designaciones de cargos, los ingresos y ascensos dentro del escalafón de Profesores y la designación de Jurados para Trabajos de Ascenso. Para trabajar con esos 3 dominios se trabajó con las Actas de Consejos Directivos y Actas de Consejos Académicos. La elección de los 3 dominios se tomó buscando tener una variedad de estilos de texto semiestructurado para obtener resultados diversos sobre el funcionamiento. \\
 
-\section{Selección de Documentos de Prueba}
+La selección de los documentos se realizó sobre el conjunto de las actas de los Consejos Directivos y Académicos de la Universidad Simón Bolívar desde el año 1998 hasta el año 2012. Esto permite que las pruebas se hagan sobre un conjunto de documentos que pueden tener variabilidad en su estilo, redacción y estructura en los años. Del conjunto de actas en el intervalo de tiempo especificado, se hizo una preselección de los documentos para utilizar las actas de los Consejos Ordinarios. Adicionalmente, según cada dominio de aplicación se extrajeron las actas que sí contienen información sobre los dominios. Es decir, se utilizaron los documentos que contienen información sobre los dominios elegidos, descartando aquellas actas que no contenían texto de interés.\\
 
-La selección de los documentos se realizó sobre el conjunto de las actas de los Consejos Directivos y Académicos de la Universidad Simón Bolívar. Con el objetivo de probar apropiadamente el Extractor, se decidió trabajar con las actas desde el año 1998 hasta el año 2012. Esto permite que las pruebas se hagan sobre un conjunto de documentos semiestructurado, pero que puede mostrar variabilidad en su redacción y estructura en los años.\\
+Una vez definidos los dominios se definieron varios conjuntos de prueba. En primera instancia se probaron los Módulos de Determinación de Fuente de Incompletitud y Módulo de Búsqueda Focalizada de Información por separado. Luego se hicieron pruebas sobre ambos compontentes integrados. A continuación se describen con mayor profundidad las pruebas realizadas sobre el sistema. 
 
-Del conjunto de actas en el intervalo de tiempo especificado, se hizo una preselección de los documentos para utilizar las actas de los Consejos Extraordinarios. Adicionalmente, según cada dominio de aplicación se extrajeron las actas que sí contienen información sobre los dominios. Es decir, se utilizaron los documentos que contienen información sobre los dominios elegidos.\\
+\section{Pruebas unitarias sobre el Módulo de Determinación de Origen de la Incompletitud.} 
 
-Para probar el preprocesador, se tomó un conjunto de archivos seleccionados aleatoriamente con uniformidad sobre los años. La prueba consistió en ver si el fragmento de texto extraído por el preprocesador coincidía exactamente, estaba contenido, contenia o era completamente disjunto con el segmento de texto que debería ser extraído. Esta prueba se hizo manualmente. \\
+\section{Pruebas unitarias sobre el Módulo de Búsqueda Focalizada de Información}
 
-\section{Pruebas de Extractor Focalizado}
+Para probar el Módulo de Búsqueda Focalizada de Información se hicieron diseñaron 2 pruebas por dominio. Por un lado de hicieron pruebas para el Preprocesador de Texto y en segunda instancia Pruebas para el Extractor Focalizado. 
+
+\subsection{Pruebas del Preprocesador de Texto}
+
+Para probar el preprocesador, se tomó un conjunto de archivos seleccionados aleatoriamente con uniformidad sobre los años. La muestra elegida fue de un tercio de la población total de actas existentes, para cada dominio. Para las designaciones se trabajó con 73 documentos, para las incorporaciones y ascensos dentro del escalafón se trabajó con 77 documentos y para la designación de Trabajos de Jurado de Ascenso se trabajó con 49 documentos. \\
+
+Las pruebas en esencia consistieron en ver si el fragmento de texto extraído por el preprocesador coincidía exactamente, estaba contenido, contenía o era completamente disjunto con el segmento de texto que debería ser extraído. Esto es: pueden verse ambos fragmentos de textos como secuencias de caracteres y se puede examinar si ambas secuencias coinciden por completo, tienen relaciones de contención o son completamente diferentes. \\
+
+Esta prueba se hizo manualmente: se examinó el resultado de la extracción realizada por el preprocesador y se buscó dentro de cada documento el fragmento que debería extraerse. \\
+
+Se definió como \emph{aprobado} que o bien el fragmento extraído sea completamente igual a la respuesta esperada (caso correcto) o si el fragmento extraído contiene a la respuseta esperada y algunos caracteres de más. Dicho caso se considera aprobado porque en esencia el que el documento preprocesado no contenga algunas líneas más de código no afecta considerablemente la extracción focalizada. Como \emph{no aprobado} se entienden los casos en los que la respuesta está incompleta (la respuesta esperada contiene al fragmento de texto obtenido) o que los fragmentos son completamente disjuntos. \\
+
+\subsection{Pruebas de Extractor Focalizado}
 
 Para probar el extractor focalizado, se tomó un conjunto de prueba seleccionado aleatoriamente con uniformidad sobre los años. De cada archivo seleccionado, se tomaban hasta 3 designaciones (falta explicalro para los otros dominios), que se utilizaban para realizar pruebas. Una prueba consite en hacer una búsqueda focalizada sobre cada uno de los campos de una designación: se asume que se tienen algunos valores de esa designación (un contexto de extracción) y se buscan los campos faltantes. \\
 

@@ -1,57 +1,37 @@
 % Resultados
 \chapter{Resultados} \label{chap:resultados}
 
-\begin{table}[h]
-\caption{ Resultados de la evaluación del Preprocesador de Textos}
-\centering
-\scriptsize
-\begin{tabular*}{.40\textwidth}{@{\extracolsep{\fill}} | c || c | c |}
-\hline
-Dominio & Correctos & Incorrectos \\
-\hline
-Designaciones & .953 & 0.046 \\
-Designaciones & .953 & 0.046 \\
-\hline
-\end{tabular*}
-\label{tabla-resultados-preprocesamientoDatosi}
-\end{table}
+A continuación se muestran los resultados de las pruebas realizadas.
+
+\section{Resultados de las pruebas unitarias sobre el Módulo de Determinación de Origen de la Incompletitud.} 
+
+\section{Resultados de las pruebas unitarias sobre el Módulo de Búsqueda Focalizada de Información}
+
 
 \begin{table}[h]
-\caption{ Resultados detallados la evaluación del Preprocesador de Textos}
+\caption{Resultados detallados la evaluación del Preprocesador de Textos}
 \centering
 \scriptsize
-\begin{tabular*}{.60\textwidth}{@{\extracolsep{\fill}} !{\vrule width 1pt} c !{\vrule width 1pt} c | c !{\vrule width 1pt} c | c !{\vrule width 1pt}}
+\begin{tabular*}{1\textwidth}{@{\extracolsep{\fill}} !{\vrule width 1pt} c !{\vrule width 1pt} c | c | c!{\vrule width 1pt} c | c | c!{\vrule width 1pt}}
 \hline
-Dominio & \multicolumn{2}{c!{\vrule width 1pt}}{\bf{Aprobados}} & \multicolumn{2}{c |}{\bf{No aprobados}}\\
+Dominio & \multicolumn{3}{c!{\vrule width 1pt}}{\bf{Aprobados}} & \multicolumn{3}{c |}{\bf{No aprobados}}\\
 \hline
-
- & Correctos & Con texto de más & Incompletos & Incorrectos \\
+ & Correctos & Con texto de más & \bf{Total aprobados} & Incompletos & Incorrectos & \bf{Total no aprobados}\\
 \hline
-Designaciones & 87.69\% & 7.69\% & 3.07\% & 1.54\% \\
+Designaciones & 87.69\% & 7.69\% & \bf{95.39\%} & 3.07\% & 1.54\% & \bf{4.61\%}\\
 \hline
-\end{tabular*}
-\label{tabla-resultados-preprocesamientoDatosii}
-\end{table}
-
-\begin{table}[h]
-\caption{Resultados detallados la evaluación del Preprocesador de Textos: Designaciones}
-\centering
-\scriptsize
-\begin{tabular*}{.68\textwidth}{@{\extracolsep{\fill}} !{\vrule width 1pt} c !{\vrule width 1pt} c | c !{\vrule width 1pt} c | c !{\vrule width 1pt}}
+Escalafón & 80.51\% & 12.98\% & \bf{93.6\%}  & 6.4\% & 0\% & \bf{6.4\%} \\
 \hline
-Dominio & \multicolumn{2}{c!{\vrule width 1pt}}{\bf{Aprobados}} & \multicolumn{2}{c |}{\bf{No aprobados}}\\
-\hline
- & Correctos & Con texto de más & Incompletos & Incorrectos \\
-\hline
-\multirow{2}{*}{Designaciones} & 87.69\% & 7.69\% & 3.07\% & 1.54\% \\\cline{2-5}
-& \multicolumn{2}{c!{\vrule width 1pt}}{Aprobados: \bf{95.39}} & \multicolumn{2}{c |}{No aprobados: \bf{4.61\%}}\\
+Jurados de Ascenso & 77.55\% & 16.32\% & \bf{93.88\%} & 0\% & 6.12\% & \bf{6.12\%} \\
 \hline
 \end{tabular*}
 \label{tabla-resultados-preprocesamientoDatosDesignacion}
-\\El conjunto de prueba es de tama~no 73, un tercio de la población.
+
 \end{table}
 
+%------------------------
 
+\begin{comment}
 \begin{table}[h]
 \caption{Resultados detallados la evaluación del Preprocesador de Textos: Escalafón}
 \centering
@@ -69,24 +49,9 @@ Dominio & \multicolumn{2}{c!{\vrule width 1pt}}{\bf{Aprobados}} & \multicolumn{2
 \label{tabla-resultados-preprocesamientoDatosEscalafon}
 \\El conjunto de prueba es de tama~no 77, un tercio de la población.
 \end{table}
+\end{comment}
 
-\begin{table}[h]
-\caption{Resultados detallados la evaluación del Preprocesador de Textos: Jurados de Ascenso}
-\centering
-\scriptsize
-\begin{tabular*}{.68\textwidth}{@{\extracolsep{\fill}} !{\vrule width 1pt} c !{\vrule width 1pt} c | c !{\vrule width 1pt} c | c !{\vrule width 1pt}}
-\hline
-Dominio & \multicolumn{2}{c!{\vrule width 1pt}}{\bf{Aprobados}} & \multicolumn{2}{c |}{\bf{No aprobados}}\\
-\hline
- & Correctos & Con texto de más & Incompletos & Incorrectos \\
-\hline
-\multirow{2}{*}{Designaciones} & 77.55\% & 16.32\% & 0\% & 6.12\% \\\cline{2-5}
-& \multicolumn{2}{c!{\vrule width 1pt}}{Aprobados: \bf{93.88}} & \multicolumn{2}{c |}{No aprobados: \bf{6.12\%}}\\
-\hline
-\end{tabular*}
-\label{tabla-resultados-preprocesamientoDatosJuradosAscenso}
-\\El conjunto de prueba es de tama~no 49, un tercio de la población.
-\end{table}
+%------------------------
 
 \begin{table}[h]
 \caption{ Resultados de la evaluación del Extractor Focalizado - Dominio: Designaciones. UnitHit Measure mínimo:.75}
