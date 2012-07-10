@@ -39,7 +39,11 @@ A continuación se presentan dos archivo de configuración del Preprocesador de 
 
 \begin{code}[includerangemarker=false,frame=single,label=xml:Preprocesador,caption=Fragmento del Archivo de configuración del Extractor Focalizado de Texto con Dominio Designaciones,firstnumber=0]
 <Configuration>
-	<UnitRegExp>^(.+?)$</UnitRegExp>
+	<UnitRegExps>
+		<UnitRegExp>^(.+?)$</UnitRegExp>
+	</UnitRegExps>
+	
+	
 	<MinimumHitRatio>.5</MinimumHitRatio>
 	<DocumentsFilePath>/home/frandres/Eclipse/workspace/ExtractionModule/tests/Designaciones/preProcessedDocuments/</DocumentsFilePath>
 	<FieldDescriptors>
