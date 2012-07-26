@@ -23,6 +23,8 @@ Se utilizaron ademas las siguientes librerías open source:
 
 \section{Implementación del Módulo de Determinación de Fuente de Incompletitud (MDFI)}\label{sect:implementacion-MDFI}
 
+Dificultades: Flatter: RHS no puede tener parentesis.
+
 \section{Implementación del Módulo de Búsqueda Focalizada de Información (MBFI)}\label{sect:implementacion-MBFI}
 
 Como se ha explicado en \ref{sect:diseno-MBFI}, el Módulo de Búsqueda Focalizada de Información (MBFI) es el módulo que encuentra los valores de los campos cuyos valores son desconocidos o incompletos para una consulta dada. Estos valores son buscados en un conjunto de documentos definidos por el usuario y se encuentran tomando en cuenta un contexto de extracción que contiene información útil para la búsqueda. El MBFI tiene dos componentes: un preprocesador de texto y un extractor focalizado de información. \\
@@ -36,6 +38,8 @@ Más adelante se expondrán algunas consideraciones sobre las expresiones regula
 \subsection{Preprocesador de Textos}\label{sect:implementacion-preProcesador}
 
 Ahondando más en el componente de pre-procesamiento, su objetivo como se ha dicho es extraer de cada documento el conjunto de fragmentos que está relacionado con el dominio sobre el cual se hace la búsqueda focalizada. En tal sentido tiene como entrada un conjunto de documentos en su formato original (PDF, Portable Readable Document; HTML , Hyper Text Markup Language; DOC y DOCX, archivos de Microsoft Word) y un archivo de configuración. Su salida es un archivo .txt en el cual se tiene el conjunto de fragmentos que están relacionados con el dominio en cuestión según lo especificado por las expresiones regulares. Para procesar los documentos se utilizaron las librerías descritas anteriormente. \\
+
+Falta hablar del timing.
 
 \subsection{Extractor Focalizado}\label{sect:implementacion-extractorFocalizado}
 
