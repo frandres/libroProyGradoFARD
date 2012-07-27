@@ -1,5 +1,45 @@
 \chapter{Planteamiento del Problema} \label{chap:planteamientoProblema}
 
-Plantamiento del problema goes here.
+El problema a tratar en el presente trabajo de investigación consiste en diseñar, implementar y probar el proceso de Extracción Focalizada de Información \emph{(FIE)} definida la Arquitectura para la Interrogación de Documentos \emph{(DIA)} por Abad Mota \cite{documentInterrogationArchitecture}.  DIA es una arquitectura que permite realizar consultas sobre un conjunto de documentos  utilizando una representación basada en ontologías por medio de un lenguaje llamado \emph{ODIL} (Ontology-based Document Interrogation Language). Para ello DIA funciona en 3 fases: preparación de datos, extracción de datos e interrogación de documento. \\
 
-Es necesario aclarar que la extracción focalizada de información de este proyecto de grado está acotada en descubrir valores desconocidos de campos. El problema de descubrir incompletitudes puede ser más complicado y abarcar, por ejemplo, el problema de descubrir interrelaciones entre conceptos existentes en la ontología. 
+La primera fase consiste en la elección de un conjunto de documentos sobre el cual se realizará la interrogación y en la construcción de un extractor de información. El extractor de información puede realizarse utilizando mecanismos de procesamiento de lenguaje natural, de aprendizaje de máquina, estadísticos, entre otros posibles.\\
+
+La segunda fase consiste en realizar una primera Extracción Amplia de Información \emph{(BIE)} del conjunto de documentos utilizando el extractor ya construido. El objetivo final de esta fase es poblar una Base de Datos relacional. \\
+
+En la tercera fase los usuarios, toda vez que se haya poblado la base de datos con datos, pueden realizar preguntas sobre el documento. En este punto se debe determinar la respuesta basado en la información presente en la Base de Datos y en un conjunto de documentos. El proceso de realizar una segunda extracción sobre documentos es el denominado Extracción Focalizada de Información. \\
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1\textwidth]%
+    {FuncionamientoMBFI}
+  \caption{Arquitectura de Interrogación de documentos}
+\end{figure}\label{figura-DIA}
+
+El objetivo de la Extracción Focalizada de Información es encontrar información desconocida en la ontología realizando una extracción sobre un conjunto de documentos utilizando información presente en la ontología. El conjunto de documentos sobre el cual se hace la segunda extracción puede ser el mismo sobre el cual se hizo Extracción Amplia de Información o no. Una de las ventajas de esto es que se puede explorar un conjunto de documentos de mayor tamaño al inicial, incluyendo por ejemplo la \emph{WWW} (World Wide Web), sobre el cual es más complejo realizar una extracción inicial debido a su magnitud. La utilización de información conocida puede ser explotada por el extractor para simplificar considerablemente la búsqueda de la información faltante.\\
+
+La Extracción Focalizada de Información supone a su veces tres fases similares a las que plantea DIA. \\
+
+En primera instancia es necesario determinar el conjunto de documentos sobre el cual se realizará la FIE. El conjunto de documentos puede ser heterogéneo. Es decir, puede ocurrir que la información necesaria para encontrar información faltante sobre un concepto se encuentre en más de un tipo de documento. Puede pasar de igual manera que un tipo documento sirva para responder consultas sobre más de un concepto de la ontología y sobre más de una instancia. Puede ocurrir de igual manera que los documentos contengan información adicional que no está relacionada con los dominios de información de los conceptos de la ontología. En tal sentido, la primera labor necesaria para la FIE consiste en definir el conjunto de documentos y cómo acceder a ellos. \\
+
+\shadowbox{Duda: ¿Es necesario definir qué es ontología, qué es una instancia y un concepto? Algo más?}\\
+
+Una vez definido el conjunto de documentos, es necesario construir extractores de información que permitan encontrar la información faltante en la ontología. Igual que en el esquema general de DIA, el extractor de información puede realizarse utilizando mecanismos de procesamiento de lenguaje natural, de aprendizaje de máquina, etcétera. Lo relevante en esta fase de DIA es que el extractor de información debe construirse tomando en cuenta la información contenida en la ontología, el \emph{contexto de extracción}. Dicho contexto se puede utilizar para facilitar la búsqueda de la información faltante.\\
+
+En tercer lugar es necesario determinar los orígenes de incompletitud. Esto se debe realizar tomando en consideración dos cosas: la consulta realizada por el usuario y la información ya existente en la ontología. La incompletitud puede abarcar más que valores necesarios para responder las consultas: puede incluir información necesaria para calificar la consulta. Tomando en cuenta estos dos elementos se pueden realizar tantas búsquedas de información como sean necesarias. \\
+
+La determinación de los origenes de incompletitud de información es un tema que será abordado posteriormente en profundidad. Sin embargo es importante precisar en este punto que pueden existir más de un tipo de fuentes de incompletitud:\\
+
+\begin{enumerate}
+\item Incompletitud por la ausencia de instancias (tuplas) en la ontología. 
+\item Incompletitud por el desconocimiento de valores de atributos. 
+\item Incompletitud por el desconocimiento de interrelaciones entre instancias.
+\end{enumerate}
+
+Para este trabajo se ha definido el alcance de la Extracción Focalizada de Información en la determinación y resolución de incompletitud por desconocimiento de valores de atributos. El motivo de esto es que el descubrimiento de nuevas tuplas es un problema que no puede ser resuelto por Extracción Focalizada de Información, ya que la misma supone la existencia de información en la ontología sobre todas las instancias involucradas en una consulta. Por otro lado, si bien el descubrimiento de interrelaciones entre instancias puede modelarse como el descubrimiento de los valores de las claves foráneas que definen cada interrelación, se ha determinado que esta tarea es más compleja y puede involucrar tareas de extracción más sofisticadas que salen del alcance de este proyecto.\\
+
+Se asume, por lo tanto, que todas las instancias concernientes a los dominios sobre los cuales se hace la búsqueda están contenidas en la ontología con un subconjunto de sus campos con valores conocidos y que las interrelaciones entre los conceptos presentes en la ontología están determinadas.\\
+
+Finalmente, para probar la solución propuesta para la FIE, se trabajó con tres dominios de información relacionados con el funcionamiento interno de la Universidad Simón Bolívar: las designaciones de cargos, los ingresos y ascensos dentro del escalafón de Profesores y la designación de Jurados para Trabajos de Ascenso. Para trabajar con esos 3 dominios se trabajó con las Actas de Consejos Directivos y Actas de Consejos Académicos como conjuntos de documentos. La información concerniente a las designaciones de cargos, los ingresos y ascensos dentro del escalafón de Profesores se puede encontrar en las Actas de los Consejos Directivos. Asimismo, la información concerniente a la designación de Jurados para Trabajos de Ascenso se encuentra en las Actas de Consejos 
+Académicos. \\
+
+\shadowbox{Duda: ¿Es pertinente definir aquí los dominios sobre los cuales se probó el sistema realizado?}\\

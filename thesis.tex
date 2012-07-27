@@ -14,10 +14,11 @@
 \hbadness=10000  
 \raggedbottom
 
+\usepackage{fancybox}
 \usepackage[utf8]{inputenc} % Caracteres especiales
 \usepackage[T1]{fontenc}
 \usepackage{ae,aecompl}
-
+\usepackage{appendix} 
 % Paquetes para manejar graficos
 \usepackage{epsf}
 \usepackage[pdftex]{graphicx}
@@ -61,7 +62,7 @@
 \usepackage{tocbibind}
 \usepackage{anysize}
 \usepackage{listings}
-\usepackage{appendix} 
+
 
 % Para poder tener texto asiatico
 %\usepackage{CJK}
@@ -116,13 +117,13 @@
 \theoremstyle{plain} \newtheorem{teorema}{Teorema}
 \theoremstyle{plain} \newtheorem{lema}{Lema}
 
-% Para la creacion de los pdfs
-\usepackage{hyperref}
+
 
 \usepackage[subfigure]{tocloft}
 \setlength{\cfttabnumwidth}{3em}
 
-
+% Para la creacion de los pdfs
+\usepackage{hyperref}
 
 % Para resolver el lio del Unicode para la informacion de los PDFs
 % En pdftitle coloca el nombre de su proyecto de grado/pasantia.
@@ -140,6 +141,8 @@
 }
 
 \renewcommand{\appendixname}{Apéndice}
+\renewcommand{\appendixtocname}{Apéndices}
+\renewcommand{\appendixpagename}{Apéndices}
 
 % Crea el glosario
 \makeglossaries
@@ -151,9 +154,6 @@
 \usepackage[absolute]{textpos}
 
 % Pone los nombres y las opciones para mostrar los codigos fuentes
-\newcommand{\vrp}{Problema de Enrutamiento de Vehículos }
-\newcommand{\vrpingles}{Vehicle Routing Problem }
-\newcommand{\vrpspd}{Problema de Enrutamiento de Vehículos con Entrega y Recepción Simultánea }
 \renewcommand\lstlistingname{Código}
 \renewcommand\lstlistlistingname{Índice de algoritmos}
 \captionsetup{tablename=Tabla}
@@ -286,6 +286,9 @@
 
 % Crea el apendice
 \appendix
+\clearpage % 
+\addappheadtotoc
+\appendixpage
 \input{apendiceA.tex}
 %\input{apendiceB.tex}
 %\input{apendiceC.tex}
