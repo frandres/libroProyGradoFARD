@@ -1,33 +1,33 @@
 \chapter{Diseño} \label{chap:diseno}
 
-El sistema para realizar la Extracción Focalizada de Información está conformado por dos módulos: el Módulo de Determinación de la Fuente de Incompletitud y el Módulo de Búsqueda Focalizada de Información. 
+El sistema para realizar la Extracción Focalizada de Información está conformado por dos módulos: el Determinador del Origen de Incompletitud y el Buscador Focalizado de Información. 
 
-\section{El Módulo de Determinación de la Fuente de Incompletitud (MDFI)}\label{sect:diseno-MDFI}
+\section{El Determinador del Origen de Incompletitud (DOI)}\label{sect:diseno-DOI}
 
 Extractor plano: no se toman en cuenta ors. Quizas se debería.
 
-\section{El Módulo de Búsqueda Focalizada de Información (MBFI)}\label{sect:diseno-MBFI}
+\section{El Buscador Focalizado de Información (BFI)}\label{sect:diseno-BFI}
 
-El Módulo de Búsqueda Focalizada de Información es el encargado de encontrar los valores de los campos cuyos valores son desconocidos o incompletos para una consulta dada. Dichos valores son buscados en un conjunto de documentos presentes en el sistema de archivos donde se ejecute el sistema utilizando información de contexto proporcionada por el Módulo de Determinación de la Fuente de Incompletitud (MDFI).\\
+El Buscador Focalizado de Información es el encargado de encontrar los valores de los campos cuyos valores son desconocidos o incompletos para una consulta dada. Dichos valores son buscados en un conjunto de documentos presentes en el sistema de archivos donde se ejecute el sistema utilizando información de contexto proporcionada por el Determinador del Origen de Incompletitud (DOI).\\
 
-Para llevar a cabo esta tarea, el MBFI tiene dos componentes: un preprocesador de texto y un extractor focalizado de información. \\
+Para llevar a cabo esta tarea, el BFI tiene dos componentes: un preprocesador de texto y un extractor focalizado de información. \\
 
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=1\textwidth]%
-    {MBFIdiagram}
-  \caption[Diagrama del Módulo de Búsqueda Focalizada de Información]
-   {Diagrama del Módulo de Búsqueda Focalizada de Información}
+    {BFIdiagram}
+  \caption[Diagrama del Buscador Focalizado de Información]
+   {Diagrama del Buscador Focalizado de Información}
 \end{figure}
 
 \begin{comment}
 \begin{figure}[hb]
   \centering
   \includegraphics[width=1\textwidth]%
-    {MDFIdiagram}
-  \caption[Diagrama del Módulo Determinador de Fuente de Incompletitud]
-   {Diagrama del Módulo Determinador de Fuente de Incompletitud}
+    {DOIdiagram}
+  \caption[Diagrama del Determinador del Origen de Incompletitud]
+   {Diagrama del Determinador del Origen de Incompletitud}
 \end{figure}
 \end{comment}
 
@@ -35,7 +35,7 @@ El Preprocesador de Texto tiene como objetivo preparar el conjunto de documentos
 
 El preprocesamiento de texto es una tarea que se realiza \emph{offline}. Es decir, cada conjunto de documentos puede ser preprocesado previamente de forma para que las consultas sean respondidas lo más rápidamente posible. \\
 
-Por su parte, el Extractor Focalizado de Información (EFI) tiene como objetivo extraer el valor del campo faltante utilizando como materia prima el conjunto de documentos preprocesados y un contexto de extracción. El contexto de extracción consiste en toda la información que el MDFI puede recopilar sobre la consulta que se está realizando que puede ser de útil para hacer la extracción focalizada de información. Puede incluir por ejemplo valores de campos que están relacionados con el campo faltante dentro del dominio sobre el cual se hace la búsqueda.  \\
+Por su parte, el Extractor Focalizado de Información (EFI) tiene como objetivo extraer el valor del campo faltante utilizando como materia prima el conjunto de documentos preprocesados y un contexto de extracción. El contexto de extracción consiste en toda la información que el DOI puede recopilar sobre la consulta que se está realizando que puede ser de útil para hacer la extracción focalizada de información. Puede incluir por ejemplo valores de campos que están relacionados con el campo faltante dentro del dominio sobre el cual se hace la búsqueda.  \\
 
-El MDFI trabaja directamente con el Extractor Focalizado de Información para encontrar los valores faltantes. Esto es, una vez que se determinan las fuentes de incompletitud, el EFI recibe solicitudes de búsqueda para cada uno de los campos con valores faltantes. Esas solicitudes permiten descubrir y completar la ontología y dar respuesta a las consultas que tiene el usuario. El preprocesador, como se ha dicho, se ejecuta una única vez por conjunto de documentos. \\
+El DOI trabaja directamente con el Extractor Focalizado de Información para encontrar los valores faltantes. Esto es, una vez que se determinan las fuentes de incompletitud, el EFI recibe solicitudes de búsqueda para cada uno de los campos con valores faltantes. Esas solicitudes permiten descubrir y completar la ontología y dar respuesta a las consultas que tiene el usuario. El preprocesador, como se ha dicho, se ejecuta una única vez por conjunto de documentos. \\
 

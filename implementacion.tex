@@ -21,19 +21,19 @@ Se utilizaron ademas las siguientes librerías open source:
 
 \end{itemize}
 
-\section{Implementación del Módulo de Determinación de Fuente de Incompletitud (MDFI)}\label{sect:implementacion-MDFI}
+\section{Implementación del Determinador del Origen de Incompletitud (DOI)}\label{sect:implementacion-DOI}
 
 Dificultades: Flatter: RHS no puede tener parentesis.
 
-\section{Implementación del Módulo de Búsqueda Focalizada de Información (MBFI)}\label{sect:implementacion-MBFI}
+\section{Implementación del Buscador Focalizado de Información (BFI)}\label{sect:implementacion-BFI}
 
-Como se ha explicado en \ref{sect:diseno-MBFI}, el Módulo de Búsqueda Focalizada de Información (MBFI) es el módulo que encuentra los valores de los campos cuyos valores son desconocidos o incompletos para una consulta dada. Estos valores son buscados en un conjunto de documentos definidos por el usuario y se encuentran tomando en cuenta un contexto de extracción que contiene información útil para la búsqueda. El MBFI tiene dos componentes: un preprocesador de texto y un extractor focalizado de información. \\
+Como se ha explicado en \ref{sect:diseno-BFI}, el Buscador Focalizado de Información (BFI) es el módulo que encuentra los valores de los campos cuyos valores son desconocidos o incompletos para una consulta dada. Estos valores son buscados en un conjunto de documentos definidos por el usuario y se encuentran tomando en cuenta un contexto de extracción que contiene información útil para la búsqueda. El BFI tiene dos componentes: un preprocesador de texto y un extractor focalizado de información. \\
 
 En grandes rasgos, el funcionamiento y la implementación de ambos componentes son bastantes similares. Ambos componentes operan como extractores de texto utilizando expresiones regulares definidas previamente por un usuario experto. Dichas expresiones regulares funcionan como delimitadores del fragmento de texto que interesa según la tarea que se esté realizando: en el caso del preprocesador de texto, el objetivo es extraer el fragmento de texto que está relacionados con el dominio sobre el cuál se realiza la extracción focalizada; el extractor focalizado busca encontrar el valor del campo faltante para responder una consulta. \\
 
 Ambos componentes están hechos para trabajar con un archivo de configuración en XML que especifica los parámetros necesarios para realizar el preprocesamiento y la extracción. En particular los parámetros que se guardan en estos archivos de configuración incluyen las expresiones regulares, las rutas de directorio de los archivos de entrada, la ruta de los archivos de salida para el caso del preprocesador, entre otras cosas. De esta manera, el usuario del sistema debe preocuparse tan sólo por entender cómo realizar un archivo de configuración para cada uno de los dominios necesarios. \\
 
-Más adelante se expondrán algunas consideraciones sobre las expresiones regulares de interés para el entendimiento de la implementación del MBFI. \\
+Más adelante se expondrán algunas consideraciones sobre las expresiones regulares de interés para el entendimiento de la implementación del BFI. \\
 
 \subsection{Preprocesador de Textos}\label{sect:implementacion-preProcesador}
 
@@ -58,13 +58,13 @@ Una vez ordenadas las unidades en orden de precedencia se ubica el valor del cam
 \begin{figure}[h]
   \centering
   \includegraphics[width=1\textwidth]%
-    {FuncionamientoMBFI}
-  \caption[Funcionamiento interno del Módulo de Búsqueda Focalizada]
-   {Funcionamiento interno del Módulo de Búsqueda Focalizada}
-\end{figure}\label{figura-FuncionamientoMBFI}
+    {FuncionamientoBFI}
+  \caption[Funcionamiento interno del Buscador Focalizado de Información]
+   {Funcionamiento interno del Buscador Focalizado de Información}
+\end{figure}\label{figura-FuncionamientoBFI}
 
 
-En la figura \ref{figura-FuncionamientoMBFI} puede apreciarse el funcionamiento interno del MBFI. \\
+En la figura \ref{figura-FuncionamientoBFI} puede apreciarse el funcionamiento interno del BFI. \\
 
 \subsection{Diseño de las expresiones regulares para la configuración del Preprocesador de textos y del Extractor Focalizado}\label{sect:implementacion-regexp}
 
