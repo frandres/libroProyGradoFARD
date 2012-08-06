@@ -25,8 +25,11 @@ Se utilizaron ademas las siguientes librerías open source:
 
 El Determinador del Origen de Incompletitud tiene como objetivo encontrar qué valores de atributos desconocidos son necesarios para poder responder a una consulta y construir un contexto de extracción. Las tareas para poder hacer esto incluyen transformar las condiciones a la forma normal conjuntiva, aplanar las consultas, realizar las consultas sobre la ontología y construir el contexto de extracción. A continuación se expondrán algunas consideraciones relevantes sobre estas tareas. \\ 
 
-\subsection{}
-\cite{normalConjunctiveForm}
+\subsection{Transformación de las condiciones a la Forma Normal Conjuntiva}
+
+Como se ha dicho anteriormente, una condición se encuentra en la Forma Normal Conjuntiva (NCF) \cite{normalConjunctiveForm} cuando consiste en una secuencia conjuntiva (de operadores ANDs) de una o más condiciones de tipo disjuntiva o de átomos -esto es predicados o negaciones de predicados -. Toda afirmación lógica escrita en términos de conjunciones, negaciones y disjunciones puede ser escrita en la forma normal conjuntiva. (Weisstein 1997 \cite{normalConjunctiveForm}). \\
+
+El procedimiento para transformar cualquier afirmación en la NCF consiste en realizar una serie de conversiones aplicando algunos teoremas lógicos como las Leyes de De Morgan, entre otros. El procedimiento utilizado es una implementación del mecanismo propuesto por el Profesor Jason Eisner. \cite{normalConjunctiveFormImplementation}. \\
 
 \section{Implementación del Buscador Focalizado de Información (BFI)}\label{sect:implementacion-BFI}
 
@@ -42,7 +45,7 @@ Más adelante se expondrán algunas consideraciones sobre las expresiones regula
 
 Ahondando más en el componente de pre-procesamiento, su objetivo como se ha dicho es extraer de cada documento el conjunto de fragmentos que está relacionado con el dominio sobre el cual se hace la búsqueda focalizada. En tal sentido tiene como entrada un conjunto de documentos en su formato original (PDF, Portable Readable Document; HTML , Hyper Text Markup Language; DOC y DOCX, archivos de Microsoft Word) y un archivo de configuración. Su salida es un archivo .txt en el cual se tiene el conjunto de fragmentos que están relacionados con el dominio en cuestión según lo especificado por las expresiones regulares. Para procesar los documentos se utilizaron las librerías descritas anteriormente. \\
 
-Falta hablar del timing.
+Empíricamente se observó que el procesador de expresiones regulares toma una cantidad de tiempo considerable cuando no lograr hacer un match. Para poder controlar esto se utilizó un sistema de timeouts basado en la utilización de threads, para agilizar el preprocesamiento y la fase de pruebas. \\
 
 \subsection{Extractor Focalizado}\label{sect:implementacion-extractorFocalizado}
 
