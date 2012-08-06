@@ -10,7 +10,7 @@ El lenguaje de programación utilizado para la implementación del sistema de Ex
 
 %\<Para parsear las consultas, se trabajó con las librerías elaboradas por Andueza y Arteta (año) en su proyecto de Grado (referenciar). Hablar aqui de ellas.>\
 
-Se utilizaron ademas las siguientes librerías open source: 
+Se utilizaron las siguientes librerías open source: 
 
 \begin{itemize}
 \item Para desplegar mensajes de traza y errores se utilizó la librería Log4J. Dicha librería permite en lugar de imprimir mensajes por el Standard Output, imprimirlos dependiendo de un nivel de desarrollo espeficiado en un archivo de configuración. A la hora de desplegar un mensaje se elige un nivel de desarrolo: traza, error, error fatal, warning, entre otros. Luego con modificar el archivo de configuración de la librería se puede fácilmente apagar y prender los niveles para que se impriman o dejen de imprimir algunos mensajes y cambiar rápidamente entre etapas de desarrollo, debugging, pruebas y puesta en producción. Se utilizó la version 1.2.16.
@@ -30,6 +30,12 @@ El Determinador del Origen de Incompletitud tiene como objetivo encontrar qué v
 Como se ha dicho anteriormente, una condición se encuentra en la Forma Normal Conjuntiva (NCF) \cite{normalConjunctiveForm} cuando consiste en una secuencia conjuntiva (de operadores ANDs) de una o más condiciones de tipo disjuntiva o de átomos -esto es predicados o negaciones de predicados -. Toda afirmación lógica escrita en términos de conjunciones, negaciones y disjunciones puede ser escrita en la forma normal conjuntiva. (Weisstein 1997 \cite{normalConjunctiveForm}). \\
 
 El procedimiento para transformar cualquier afirmación en la NCF consiste en realizar una serie de conversiones aplicando algunos teoremas lógicos como las Leyes de De Morgan, entre otros. El procedimiento utilizado es una implementación del mecanismo propuesto por el Profesor Jason Eisner. \cite{normalConjunctiveFormImplementation}. \\
+
+\subsection{Implementación del constructor de contextos de extracción}
+
+Para poder construir los contextos de extracción, es necesario en primer lugar aplanar las consultas y las condiciones. El motivo de esto es que el contexto de extracción diseñado para este proyecto, tal y como fue especificado en la sección \ref{sect:diseno-extCont}, consiste en los posibles valores conocidos de los atributos relacionados con el atributo cuyo valor falta. Por lo tanto, el primer paso consiste en aplanar las consultas resolviendo cosas como las consultas anidadas, las operaciones aritméticas presentes en las condiciones, operaciones sobre cadenas de caracteres y en general cualquier cosa que sea necesaria para que en cada consulta sólo hayan condiciones sin operaciones adicionales. \\
+
+Una vez aplanadas las consultas, se realiza la construcción del contexto de extracción. Para ello, se generan todos los posibles valores de cada atributo relacionado con el atributo original siguiendo la especificación obtenida en un archivo de configuración relacionado con cada dominio de información. En dicho archivo de configuración se especifica el dominio explícita o implícitamente, enumerando los posibles valores que puede tener o unas cotas superiores e inferiores y un incremento para generar los posibles valores entre ellos, útil para dominios numéricos - interos y punto flotante - y fechas. Los posibles valores de cada atributo son generados tomando en cuenta esta espeficación y las condiciones de cada consulta.  \\
 
 \section{Implementación del Buscador Focalizado de Información (BFI)}\label{sect:implementacion-BFI}
 
