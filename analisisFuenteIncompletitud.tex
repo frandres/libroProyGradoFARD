@@ -1,4 +1,4 @@
-\chapter{Análisis de incompletitudes en consulta por el desconocimiento de valores de atributos y propuesta para su determinación} \label{chap:analisisOrigenIncompletitud}
+\chapter{Análisis de incompletitudes} \label{chap:analisisOrigenIncompletitud}
 
 \newcommand{\RESULT}[3]{
 	\text{#1} \\[5pt]
@@ -10,17 +10,17 @@
 }
 
 
-La incompletitud en la respuesta de una consulta puede estar dada por varios motivos. Puede ocurrir que falta una tupla en la base de datos, que se desconoce una relación entre 2 tuplas o por el desconocimiento del valor de uno o más atributos de una tupla. \\
+La incompletitud en la respuesta de una consulta puede estar dada por varios motivos. Puede ocurrir que falta una tupla en la base de datos, que se desconoce una relación entre dos tuplas o por el desconocimiento del valor de uno o más atributos de una tupla. \\
 
 El primer caso tiene quizás la mayor dificultad a la hora de determinar con precisión que existe incompletitud ya que no hay una forma de saber, a partir de los datos que se tienen cargados en la base de datos y la estructura de la ontología, que falta una instancia. El segundo caso también es complejo por cuanto se necesita poder determinar si dos instancias están relacionadas siguiendo la semántica de una interrelación que se encuentre en el modelo ER o en la ontología en base al texto. El tercer caso es el menos complejo de los tres pues se puede trabajar con la información que ya se tiene para determinar qué atributos faltan y posteriormente realizar la búsqueda focalizada, usando potencialmente pistas o datos ya contenidos en la ontología o la BD o datos de la consulta misma.\\
 
-En este proyecto se trabajará sólo con el tercer caso, la determinación de valores de atributos faltantes.\\
+En este proyecto se trabajará sólo con el tercer caso, la determinación de valores de atributos faltantes para poder dar respuesta a una consulta.\\
 
-En este capítulo se presenta un resumen de los resultados obtenidos para determinar qué atributos tienen valores nulos necesarios para responder una consulta. Para ello se presenta primeramente un análisis y una presentación general del mecanismo para encontrar qué valores de atributos faltan en una consulta. En una segunda instancia se presenta una clasificación de las consultas según las operaciones que se deben hacer para determinar los origenes de incompletitud y el mecanismo para determinar los origenes de incompletitud particular para cada una de ellos.\\
+En este capítulo se presenta un resumen de los resultados obtenidos para determinar qué atributos tienen valores nulos necesarios para responder una consulta. Para ello se presenta primeramente un análisis y una presentación general del mecanismo para encontrar qué valores de atributos faltan en una consulta. En una segunda instancia se presenta una clasificación de las consultas según las operaciones que se deben hacer para determinar los origenes de la incompletitud y el mecanismo para determinar los origenes de incompletitud particular para cada una de ellos.\\
 
 \section{Mecanismo para encontrar qué valores de atributos faltan en una consulta.}\label{section-mecanismoEncontrarValoresFaltantes}
 
-Es conveniente empezar diciendo que la resolución de una consulta de ODIL pasa por tres pasos: en primera instancia, la consulta de ODIL es traducida a una o más consultas SQL que se ejecutan en una Base de Datos Relacional. Dependiendo de la estructura de la ontología (la presencia de agregaciones o generalización-especialización), se hace necesario componer la respuestas a las consultas SQL ejecutadas para dar una respuesta a la consulta original en ODIL. Por último, se evalúa esta respuesta para determinar si está incompleta o no. \\
+Es conveniente empezar diciendo que la resolución de una consulta de ODIL pasa por tres pasos. Primero, la consulta de ODIL es traducida a una o más consultas SQL que se ejecutan en una Base de Datos Relacional. Dependiendo de la estructura de la ontología (la presencia de agregaciones o generalización-especialización), se hace necesario componer la respuestas a las consultas SQL ejecutadas para dar una respuesta a la consulta original en ODIL. Por último, se evalúa esta respuesta para determinar si está incompleta o no. \\
 
 En este contexto, el proceso de encontrar qué valores de atributos faltan en una consulta consiste en esencia en determinar para cada una de las instancias de los conceptos que participan en una consulta, qué atributos tienen valores nulos que son necesarios para responder a la consulta. Podría darse el caso de que por decisiones de diseño de la ontología o de la base de datos sea posible asignar un valor por defecto, diferente de nulo, para señalar incompletitud; en caso de que esto ocurra la tarea de encontrar nulos se reemplaza por la tarea de inspeccionar los valores de los atributos participantes en la consulta para encontrar el valor por defecto especificado. \\
 
@@ -32,11 +32,13 @@ Es conveniente recordar que la estructura general de una consulta en ODIL está 
 
 El primer tipo de consulta sirve para determinar un tipo de incompletitud de la Base de Datos en el cual no se puede responder la consulta del usuario porque la información que se desea no está presente. Dado que se quiere realizar extracción focalizada de información para completar los valores faltantes, es pertinente utilizar la calificación completa de la consulta original, con todas las condiciones que usan atributos de L2 diferentes del atributo sobre el cual se realiza la extracción focalizada. Esto es, es deseable que en las consultas adicionales para encontrar valores de un atributo que falta se mantengan las condiciones de los otros atributos pertenecientes a L2. De lo contrario se trataría de una búsqueda de atributos incompletos que se puede realizar en cualquier momento, y como no se usaría información ya conocida en la ontología sería un proceso diferente de lo que DIA define como extracción focalizada. \\
 
-El segundo tipo de consulta adicional está ligado a otro tipo de incompletitud, en el cual es posible que la respuesta no esté completa porque no es posible encontrar qué instancias cumplen con las condiciones del SUCH THAT. Este tipo de consulta se realiza para cada uno de los atributos que participa en la calificación de la consulta, utilizando el resto de las condiciones del SUCH THAT que no incluyen al atributo que se esté examinando. Al utilizar el resto de las condiciones sin incluir a uno de los atributos se está realizando una calificación parcial de la consulta. Esto se debe a que al igual que en el primer tipo de consulta, se quiere realizar extracción focalizada y por lo tanto interesa que haya una calificación sobre los atributos siempre y cuando no sea sobre el atributo sobre el que se quieren buscar valores NULL. Esto último se debe a que de lo contrario podrían no encontrarse todos los valores NULL. \\
+El segundo tipo de consulta adicional está ligado a otra forma de incompletitud, en el cual es posible que la respuesta no esté completa porque no es posible encontrar qué instancias cumplen con las condiciones del SUCH THAT. Este tipo de consulta se realiza para cada uno de los atributos que participa en la calificación de la consulta, utilizando el resto de las condiciones del SUCH THAT que no incluyen al atributo que se esté examinando. Al utilizar el resto de las condiciones sin incluir a uno de los atributos se está realizando una calificación parcial de la consulta. Esto se debe a que al igual que en el primer tipo de consulta, se quiere realizar extracción focalizada y por lo tanto interesa que haya una calificación sobre los atributos siempre y cuando no sea sobre el atributo sobre el que se quieren buscar valores nulos. Esto último se debe a que de lo contrario podrían no encontrarse todos los valores nulos. \\
 
-Para realizar la calificación parcial de la consulta, es necesario eliminar exactamente las partes de la condición en las cuales se encuentra el atributo en cuestión. Dado que el SUCH THAT puede estar formada por una serie de conjunciones y disjunciones de condiciones, es necesario elegir bien que partes de la condición se quieren eliminar. El criterio que se desea es que se reduzcan todas las ocurrencias del atributo en la calificación manteniendo el mayor número de calificaciones sobre otros atributos.\\
+Para realizar la calificación parcial de la consulta, es necesario eliminar exactamente las partes de la condición en las cuales se encuentra el atributo en cuestión. Dado que la cláusula SUCH THAT puede estar formada por una serie de conjunciones y disjunciones de condiciones, es necesario elegir bien que partes de la condición se quieren eliminar. Se busca eliminar de la consulta todas las ocurrencias del atributo en la calificación manteniendo el mayor número de calificaciones sobre otros atributos. \\
 
-Para hacer esto, se puede suponer que el SUCH THAT se encuentra en una Forma Normal Conjuntiva (NCF) - esto es, está formado por una secuencia de conjunciones de subcondiciones formadas exclusivamente por disjunciones  de átomos (Weisstein, sin fecha \cite{normalConjunctiveForm}). En el caso en el que el SUCH THAT no se encuentre en la NCF, es posible realizar una serie de transformaciones sobre la mismas aplicando tantas veces como sea necesarios los teoremas de Morgan y otras propiedades lógicas. Una vez que se tiene la NCF, se deben eliminar las cláusulas que precisamente conciernen al atributo que se está inspeccionando. La necesidad de utilizar la FNC es que si se tiene una cláusula que involucre al atributo A en cuestión en disjunción con condiciones sobre una lista de otros atributos LA, eliminar la condición sobre A puede hacer más restrictiva la calificación hecha en el SUCH THAT. \\
+Para hacer esto, se puede suponer que el SUCH THAT se encuentra en una Forma Normal Conjuntiva (NCF) - esto es, está formado por una secuencia de conjunciones de subcondiciones formadas exclusivamente por disjunciones  de átomos (Weisstein, sin fecha \cite{normalConjunctiveForm}). En el caso en el que el SUCH THAT no se encuentre en la NCF, es posible realizar una serie de transformaciones sobre la mismas aplicando tantas veces como sea necesarios los teoremas de Morgan y otras propiedades lógicas.\\
+
+ Una vez que se tiene la NCF, se deben eliminar las cláusulas que precisamente conciernen al atributo que se está inspeccionando. La necesidad de utilizar la FNC es que si se tiene una cláusula que involucre al atributo A en cuestión en disjunción con condiciones sobre una lista de otros atributos LA, eliminar la condición sobre A puede hacer más restrictiva la calificación hecha en el SUCH THAT. \\
 
 Por ejemplo, si se tiene la siguiente consulta: \\
 
@@ -47,7 +49,6 @@ SUCH THAT estudiante.carrera = ‘Ingeniería de Computación’ OR estudiante.i
 	Con los siguientes datos:\\
 
 \begin{table}[h]
-\caption{Tabla de datos con ejemplos del mecanismo para encontrar qué valores de atributos faltan en una consulta}
 \centering
 \scriptsize
 \begin{tabular*}{.5\textwidth}{@{\extracolsep{\fill}} | c | c | c | }
@@ -66,18 +67,19 @@ Carnet & Carrera & Indice\\
 \label{tabla-datos-ejemplo1FuenteIncompletitud}
 \end{table}
 
-Entonces hacer la consulta: \\
+Entonces hacer la consulta: 
 
 \QUERY{		
 LISTA estudiante.carnet INSTANCES
 SUCH THAT (estudiante.carrera  is null) AND estudiante.indice \textless 3; (en la que se eliminó la condición sobre estudiante.carrera del or)\\
 }
-	Devuelve como resultado:\\
+	Devuelve como resultado:
 
 \begin{center}
 06-40001\\
 \end{center}
-	Mientras que se esperaría que la respuesta sea \\
+
+	Mientras que se esperaría que la respuesta sea 
 
 \begin{center}	
 06-40001\\
@@ -87,19 +89,19 @@ SUCH THAT (estudiante.carrera  is null) AND estudiante.indice \textless 3; (en l
 
 	Que son todas las tuplas que potencialmente podrían responder a la consulta realizada (puede darse que el estudiante con carnet 06-40003 estudie computación y por lo tanto deba aparecer en el resultado de la consulta realizada por el usuario aunque su indice sea mayor o igual a 3). \\
 
-Habiendo aclarado como se realiza la calificación parcial, es pertinente realizar dos comentarios adicionales sobre estos tipos de consulta explicados. En primer lugar, tiene sentido realizar todas las consultas de tipo 2 antes de realizar la consulta de tipo 1: el motivo de esto es que es necesario garantizar que exista el menor número de valores null para atributos usados para calificar la consulta 1, de forma que se disminuya el riesgo de que la respuesta esté incompleta porque no se encuentren todas las tuplas que califiquen en la consulta. \\
+Habiendo aclarado cómo se realiza la calificación parcial, es pertinente realizar dos comentarios adicionales sobre estos tipos de consulta explicados. Tiene sentido realizar todas las consultas que buscan hallar valores de atributos faltantes en la SUCH THAT antes de buscar valores de atributos que se encuentran en la LIST. El motivo de esto es que es necesario garantizar que exista el menor número de valores nulos para atributos usados para calificar la consulta 1, de forma que se disminuya el riesgo de que la respuesta esté incompleta porque no se encuentren todas las tuplas que califiquen en la consulta. \\
 
-	En segundo lugar, el proceso de extracción focalizada puede ser de tipo iterativo y que la búsqueda focalizada puede repetirse hasta que se cumpla que no se encuentren más valores de atributos. El motivo de esto es que si en la búsqueda focalizada se utiliza información sobre los atributos con valores diferentes de null de las instancias que están incompletas para facilitar la ubicación de los atributos faltantes, entonces la posibilidad de encontrar valores de atributos aumenta a medida que se tienen más atributos diferentes de nulls en la Base de Datos. Consecuentemente puede ser útil realizar estos tipos de consultas más de una vez. \\
+	En segundo lugar, el proceso de extracción focalizada puede ser de tipo iterativo y que la búsqueda focalizada puede repetirse hasta que se cumpla que no se encuentren más valores de atributos. El motivo de esto es que si en la búsqueda focalizada se utiliza información sobre los atributos con valores diferentes de nulos de las instancias que están incompletas para facilitar la ubicación de los atributos faltantes, entonces la posibilidad de encontrar valores de atributos aumenta a medida que se tienen más atributos diferentes de nulo en la Base de Datos. Consecuentemente puede ser útil realizar estos tipos de consultas más de una vez. \\
 
-Se hace necesario una vez explicado el mecanismo general destacar que dado que las consultas realizada tienden a ser por su naturaleza de menor complejidad que las consultas originales, es posible realizarlas como una consulta más en ODIL. Esto es, si se tiene por ejemplo una consulta con agregados (caso que se verá posteriormente), el mecanismo de determinación de la incompletitud trabajará sobre los miembros del mismo, por lo que la composición de la respuesta que realiza el procesador de consultas que hace ODIL no afecta de forma alguna la determinación del origen de incompletitud.\\
+Se hace necesario una vez explicado el mecanismo general destacar que dado que las consultas realizadas tienden a ser por su naturaleza de menor complejidad que las consultas originales, es posible realizarlas como una consulta más en ODIL. Esto es, si se tiene por ejemplo una consulta con agregados (caso que se verá posteriormente), el mecanismo de determinación de la incompletitud trabajará sobre los miembros del mismo, por lo que la composición de la respuesta que realiza el procesador de consultas que hace ODIL no afecta de forma alguna la determinación del origen de incompletitud.\\
 
-\section{Forma canónica de los diferentes tipos de consulta que se pueden hacer en ODIL y las consultas realizadas determinar que atributos están incompletos.}\label{section-formaCanonica}
+\section{Forma canónica de los diferentes tipos de consulta.}\label{section-formaCanonica}
 
 Como se ha visto, el proceso de determinar la incompletitud de una respuesta por la falta de valores de atributos, incluye la realización de consultas adicionales sobre los conceptos y atributos que participan en la consulta hecha para precisar la incompletitud. A continuación se presentan varios casos diferentes para poder identificar fácilmente dada la forma general de una consulta que consulta se debe realizar. \\
 
 \subsection{Consulta simple}
 
-La forma más simple la siguiente: \\
+La forma más simple la siguiente: 
 
 \QUERY{		
 LIST \textless Lista de atributos L1\textgreater INSTANCES \\
@@ -122,7 +124,7 @@ LIST \textless Clave del Concepto\textgreater INSTANCES \\
 SUCH THAT \textless A is null, Calificación parcial de la consulta con las condiciones sobre L2-{Atributo A}\textgreater; \\
 }
 
-Para ilustrar este caso, considérese la siguiente consulta en ODIL: \\
+Para ilustrar este caso, considérese la siguiente consulta en ODIL: 
 
 \QUERY{
 LIST pais.poblacion INSTANCES\\
@@ -131,7 +133,6 @@ SUCH THAT pais.capital = ‘Brasilia’;\\}
 Si la tupla correspondiente a Brasil no tiene un valor no nulo para el atributo capital la siguiente consulta dará una lista vacía, considerando que en la Base de Datos se tiene lo siguiente:\\
 
 \begin{table}[h]
-\caption{Tabla de datos con ejemplos del mecanismo para encontrar qué valores de atributos faltan en una consulta en el caso de una consulta simple}
 \centering
 \scriptsize
 \begin{tabular*}{.5\textwidth}{@{\extracolsep{\fill}} | c | c | c | }
@@ -144,7 +145,7 @@ Brasil & Null & 5.000.000 \\
 \label{tabla-datos-ejemplo1FuenteIncompletitudConsultaSimple}
 \end{table}
 
-	La consulta pertinente para determinar la incompletitud en este problema sería: \\
+	La consulta pertinente para determinar la incompletitud en este problema sería: 
 
 \QUERY{
 LIST pais.nombre INSTANCES \\
@@ -152,12 +153,13 @@ SUCH THAT pais.capital is null; \\
 }
 
 y \\
+
 \QUERY{
 LIST pais.nombre INSTANCES \\
 SUCH THAT pais.poblacion is null AND  pais.capital = ‘Brasilia’; \\
 }
 
-La primera consulta permite determinar que la capital de Brasil tiene un valor null. Análogamente, en caso de que la población tuviese un valor null, la segunda consulta determinaría que no se tiene la población de Brasil. \\
+La primera consulta permite determinar que la capital de Brasil tiene un valor nulo. Análogamente, en caso de que la población tuviese un valor nulo, la segunda consulta determinaría que no se tiene la población de Brasil. \\
 
 \subsection{Consulta con funciones agregadas}
 
@@ -168,44 +170,44 @@ SUCH THAT \textless Calificación de la consulta con las condiciones sobre la li
 
 	Que genera las siguientes consultas adicionales para determinar incompletitud (para cada concepto que participe): \\
 
-1) Para cada atributo A de L0 \\
+1) Para cada atributo A de L0 
 
 \QUERY{	
 LIST \textless Clave del Concepto\textgreater INSTANCES \\
 SUCH THAT  \textless A is null Calificación de la consulta con las condiciones sobre la lista de atributos L2\textgreater; \\
 }
 
-2) Para cada atributo A de L1: \\
+2) Para cada atributo A de L1:
 
 \QUERY{	
 LIST \textless Clave del Concepto\textgreater INSTANCES \\
 SUCH THAT \textless A is null, Calificación de la consulta con las condiciones sobre la lista de atributos L2\textgreater; \\
 }
 
-3)  Para cada atributo A perteneciente a L2: \\
+3)  Para cada atributo A perteneciente a L2: 
 
 \QUERY{	
 LIST \textless Clave del Concepto\textgreater INSTANCES \\
 SUCH THAT \textless A is null, Calificación parcial de la consulta con condiciones sobre L2-{Atributo A}\textgreater; \\
 }
 
-	En esencia las consultas generadas son muy similares a las consultas generadas en el caso simple, sólo que se añade la  verificación de nulls sobre los agregados. \\
+	En esencia las consultas generadas son muy similares a las consultas generadas en el caso simple, sólo que se añade la  verificación de nulos sobre los agregados. \\
 
-	Para consultas con funciones agregadas, se puede presentar este ejemplo: \\
+	Para consultas con funciones agregadas, se puede presentar este ejemplo: 
 	
 \QUERY{	
 LIST sum (pais.poblacion) INSTANCES \\
 SUCH THAT pais.nombre like ‘A’ OR pais.nombre like ‘B’ ; \\
 }
 
-Genera las consultas: \\
+Genera las consultas: 
 
 \QUERY{	
 LIST pais. nombre\_pais INSTANCES \\
 SUCH THAT pais.poblacion is null AND (pais.abreviacion like ‘A\%’ OR pais.nombre abreviacion like ‘B\%’) ;\\
 }
 
-La cual permite estar seguro de tener todas las poblaciones necesarias para calcular el agregado. También se genera la consulta: \\
+La cual permite estar seguro de tener todas las poblaciones necesarias para calcular el agregado. También se genera la consulta: 
 
 \QUERY{	
 LIST nombre\_pais INSTANCES \\
@@ -217,7 +219,6 @@ Que permite ver que todas las abreviaciones estén completas.\\
 	Si se tienen los siguientes datos en la BD:\\
 	
 \begin{table}[h]
-\caption{Tabla de datos con ejemplos del mecanismo para encontrar qué valores de atributos faltan en una consulta en el caso de una consulta con funciones agregadas}
 \centering
 \scriptsize
 \begin{tabular*}{.5\textwidth}{@{\extracolsep{\fill}} | c | c | c | }
@@ -238,7 +239,7 @@ La primera consulta determina que falta la población de Argentina. La segunda d
 
 \subsection{Consultas anidadas.}
 
-Son del tipo: \\
+Son del tipo: 
 
 \QUERY{	
 LIST \textless Lista de atributos L1\textgreater INSTANCES \\
@@ -247,14 +248,14 @@ SUCH THAT \textless Condiciones sobre la lista de atributos L4\textgreater \text
 }
 	Que genera las siguientes consultas adicionales para determinar incompletitud:\\
 
-1) Para cada atributo A de L1\\
+1) Para cada atributo A de L1
 
 \QUERY{	
 LIST \textless Clave del Concepto\textgreater INSTANCES \\
 SUCH THAT \textless A is null AND Calificación con las condiciones de consulta anidada y la lista de atributos L2\textgreater; \\
 }
 
-2)  Para cada atributo A perteneciente a L2: \\
+2)  Para cada atributo A perteneciente a L2: 
 
 \QUERY{	
 LIST \textless Clave del Concepto, Atributo A\textgreater INSTANCES \\
@@ -262,14 +263,14 @@ SUCH THAT \textless A is null AND Calificación parcial de la consulta con las c
 de la consulta anidada-{Atributo A} U L2-{Atributo A}\textgreater;
 }
 
-3) Para cada atributo A de L3 \\
+3) Para cada atributo A de L3 
 
 \QUERY{	
 LIST \textless Clave del Concepto\textgreater INSTANCES \\
 SUCH THAT \textless A is null AND Calificación de la consulta con las condiciones sobre lista de atributos L4\textgreater; \\
 }
 
-4)  Para cada atributo A perteneciente a L4: \\
+4)  Para cada atributo A perteneciente a L4: 
 
 \QUERY{	
 LIST \textless Clave del Concepto\textgreater INSTANCES \\
@@ -286,7 +287,7 @@ SUCH THAT 100000 \textless (list region$^\wedge$pais.poblacion\_pais instances) 
 AND (region.abreviacion like ‘A*’  or region.abreviacion like ‘L*’ ) AND region.continente = ‘AMERICA’;\\
 }
 
-En este caso hay que realizar consultas para determinar que atributos faltan tanto en la consulta interior como en la consulta exterior:\\
+En este caso hay que realizar consultas para determinar que atributos faltan tanto en la consulta interior como en la consulta exterior:
 
 \QUERY{	
 1) LIST region.nombre INSTANCES \\
@@ -312,7 +313,6 @@ Si se tienen los siguientes datos en la Base da Datos: \\
 
 
 \begin{table}[h]
-\caption{Tabla 1 de datos con ejemplos del mecanismo para encontrar qué valores de atributos faltan en una consulta en el caso de una consulta con consultas anidadas}
 \centering
 \scriptsize
 \begin{tabular*}{.66\textwidth}{@{\extracolsep{\fill}} | c | c | c | c | }
@@ -329,7 +329,6 @@ Latinoamerica & null & America & null\\
 
 
 \begin{table}[h]
-\caption{Tabla 2 de datos con ejemplos del mecanismo para encontrar qué valores de atributos faltan en una consulta en el caso de una consulta con consultas anidadas}
 \centering
 \scriptsize
 \begin{tabular*}{.3\textwidth}{@{\extracolsep{\fill}} | c | c | }
@@ -346,7 +345,7 @@ Colombia & 35\\
 \label{tabla-datos-ejemplo1FuenteIncompletitudConsultasAnidadas2}
 \end{table}
 
-Y se tiene que la región andina está formada por Venezuela, Colombia y la región latinoamericana por Venezuela y Brasil. Entonces las consultas devuelven los siguientes resultados: \\
+Y se tiene que la región andina está formada por Venezuela, Colombia y la región latinoamericana por Venezuela y Brasil. Entonces las consultas devuelven los siguientes resultados: 
 
 \QUERY{	
 1)  Latinoamerica \\
@@ -366,30 +365,30 @@ Así, las tres consultas realizada permiten determinar los atributos que están 
 
 \subsection{Consultas con agregados}
 
-El uso de agregados de la ontología puede ser manejado de forma similar a la manera como se aborda el uso de funciones agregadas. Es necesario verificar en primer lugar que las partes del agregado que se define esté completo, esto se puede hacer con las siguientes consultas: \\
+El uso de agregados de la ontología puede ser manejado de forma similar a la manera como se aborda el uso de funciones agregadas. Es necesario verificar en primer lugar que las partes del agregado que se define esté completo, esto se puede hacer con las siguientes consultas: 
 
 \QUERY{	
 LIST \textless Lista de atributos L0 de conceptos que son partes del agregado, Lista de atributos L1\textgreater INSTANCES \\
 SUCH THAT \textless Calificación de la consulta con las condiciones sobre la lista de atributos L2\textgreater \\
 }
 
-Que genera las siguientes consultas adicionales para determinar incompletitud: \\
+Que genera las siguientes consultas adicionales para determinar incompletitud: 
 
-1) Para cada atributo A de L0 (lista de atributos del concepto parte) \\
+1) Para cada atributo A de L0 (lista de atributos del concepto parte) 
 
 \QUERY{	
 LIST \textless Clave del Concepto parte del agregado\textgreater INSTANCES \\
 SUCH THAT  \textless A is null AND Calificación de la consulta con condiciones sobre la lista de atributos L2\textgreater; \\
 }
 
-2) Para cada atributo A de L1 \\
+2) Para cada atributo A de L1 
 
 \QUERY{	
 LIST \textless Clave del Concepto sobre el que se hace la consulta\textgreater INSTANCES \\
 SUCH THAT \textless A is null AND Calificación de la consulta con condiciones sobre la lista de atributos L2\textgreater; \\
 }
 
-3)  Para cada atributo A perteneciente a L2: \\
+3) Para cada atributo A perteneciente a L2: 
 
 \QUERY{	
 LIST \textless Clave del Concepto sobre el que se hace la consulta\textgreater INSTANCES \\
@@ -400,14 +399,14 @@ Aunado a esto, existe otro origen de incompletitud para este subcaso que se debe
 
 Desafortunadamente este problema no puede ser resuelto con el mecanismo propuesto para resolver incompletitud por la falta de valores de atributos. En cierta forma, es comparable con el problema de descubrir interrelaciones entre conceptos a partir de la extracción, ya que el pertenecer a un agregado es una interrelación.\\
 	
-Por ejemplo se tiene el siguiente caso: \\
+Por ejemplo se tiene el siguiente caso: 
 
 \QUERY{	
 LIST region$^\wedge$pais.poblacion\_pais, region.clima INSTANCES\\
 SUCH THAT region.abreviacion like ‘And’; \\
 }
 
-Se generan las siguientes consultas: \\
+Se generan las siguientes consultas: 
 
 \QUERY{	
 1) LIST pais.nombre INSTANCES \\
@@ -426,10 +425,7 @@ SUCH THAT region.abreviacion is null; \\
 
 Si se tienen los siguientes datos: \\
 
-
-
 \begin{table}[h]
-\caption{Tabla 1 de datos con ejemplos del mecanismo para encontrar qué valores de atributos faltan en una consulta en el caso de una consulta con agregados}
 \centering
 \scriptsize
 \begin{tabular*}{.3\textwidth}{@{\extracolsep{\fill}} | c | c | c |}
@@ -446,9 +442,7 @@ México & 20 & Norteamerica\\
 \label{tabla-datos-ejemplo1FuenteIncompletitudConsultasAgregados1}
 \end{table}
 
-
 \begin{table}[h]
-\caption{Tabla 2 de datos con ejemplos del mecanismo para encontrar qué valores de atributos faltan en una consulta en el caso de una consulta con agregados}
 \centering
 \scriptsize
 \begin{tabular*}{.3\textwidth}{@{\extracolsep{\fill}} | c | c | c |}
