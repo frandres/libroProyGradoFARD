@@ -9,7 +9,6 @@
 	\end{center}
 }
 
-
 La incompletitud en la respuesta de una consulta puede estar dada por varios motivos. Puede ocurrir que falta una tupla en la base de datos, que se desconoce una relación entre dos tuplas o por el desconocimiento del valor de uno o más atributos de una tupla. \\
 
 El primer caso tiene quizás la mayor dificultad a la hora de determinar con precisión que existe incompletitud ya que no hay una forma de saber, a partir de los datos que se tienen cargados en la base de datos y la estructura de la ontología, que falta una instancia. El segundo caso también es complejo por cuanto se necesita poder determinar si dos instancias están relacionadas siguiendo la semántica de una interrelación que se encuentre en el modelo ER o en la ontología en base al texto. El tercer caso es el menos complejo de los tres pues se puede trabajar con la información que ya se tiene para determinar qué atributos faltan y posteriormente realizar la búsqueda focalizada, usando potencialmente pistas o datos ya contenidos en la ontología o la BD o datos de la consulta misma.\\
@@ -40,12 +39,14 @@ Para hacer esto, se puede suponer que el SUCH THAT se encuentra en una Forma Nor
 
  Una vez que se tiene la NCF, se deben eliminar las cláusulas que precisamente conciernen al atributo que se está inspeccionando. La necesidad de utilizar la FNC es que si se tiene una cláusula que involucre al atributo A en cuestión en disjunción con condiciones sobre una lista de otros atributos LA, eliminar la condición sobre A puede hacer más restrictiva la calificación hecha en el SUCH THAT. \\
 
-Por ejemplo, si se tiene la siguiente consulta: \\
+Por ejemplo, si se tiene la siguiente consulta:
 
-\QUERY{		
-LISTA estudiante.carnet INSTANCES \\
-SUCH THAT estudiante.carrera = ‘Ingeniería de Computación’ OR estudiante.indice \textless 3 \\
-}
+\begin{tabbing}	
+\= LIST estudiante.carnet \+ INSTANCES \\
+\= SUCH THAT \= estudiante.carrera = ‘Ingeniería de Computación’ \\
+\> \> OR estudiante.indice \textless 3 \\
+\end{tabbing}
+
 	Con los siguientes datos:\\
 
 \begin{table}[h]
