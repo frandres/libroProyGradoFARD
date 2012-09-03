@@ -43,7 +43,7 @@ Por ejemplo, si se tiene la siguiente consulta:
 
 \begin{tabbing}	
 \= LIST estudiante.carnet \+ INSTANCES \\
-\= SUCH THAT \= estudiante.carrera = ‘Ingeniería de Computación’ \\
+\= SUCH THAT \= estudiante.carrera=‘Ingeniería~de~Computación’ \\
 \> \> OR estudiante.indice \textless 3 \\
 \end{tabbing}
 
@@ -68,31 +68,19 @@ Carnet & Carrera & Indice\\
 \label{tabla-datos-ejemplo1FuenteIncompletitud}
 \end{table}
 
-Entonces hacer la consulta: 
+Entonces hacer la siguiente consulta, eliminando la condición sobre estudiante.carrera del OR, 
 
-\QUERY{		
-LISTA estudiante.carnet INSTANCES
-SUCH THAT (estudiante.carrera  is null) AND estudiante.indice \textless 3; (en la que se eliminó la condición sobre estudiante.carrera del or)\\
-}
-	Devuelve como resultado:
+\begin{tabbing}	
+\= LIST estudiante.carnet \+ INSTANCES \\
+\= SUCH THAT \= (estudiante.carrera  is null) \\
+\> \> AND estudiante.indice \textless 3; \\
+\end{tabbing}
 
-\begin{center}
-06-40001\\
-\end{center}
-
-	Mientras que se esperaría que la respuesta sea 
-
-\begin{center}	
-06-40001\\
-06-40003\\
-\end{center}
-
-
-	Que son todas las tuplas que potencialmente podrían responder a la consulta realizada (puede darse que el estudiante con carnet 06-40003 estudie computación y por lo tanto deba aparecer en el resultado de la consulta realizada por el usuario aunque su indice sea mayor o igual a 3). \\
+Devuelve como resultado: 06-40001, mientras que se esperaría que la respuesta sea 06-40001, 06-40003. La respuesta esperada debe contener todas las tuplas que potencialmente podrían responder a la consulta realizada. Esto se debe a que puede darse que el estudiante con carnet 06-40003 estudie Ingeniería de la Computación y por lo tanto deba aparecer en el resultado de la consulta realizada por el usuario aunque su índice sea mayor o igual a 3. \\
 
 Habiendo aclarado cómo se realiza la calificación parcial, es pertinente realizar dos comentarios adicionales sobre estos tipos de consulta explicados. Tiene sentido realizar todas las consultas que buscan hallar valores de atributos faltantes en la SUCH THAT antes de buscar valores de atributos que se encuentran en la LIST. El motivo de esto es que es necesario garantizar que exista el menor número de valores nulos para atributos usados para calificar la consulta 1, de forma que se disminuya el riesgo de que la respuesta esté incompleta porque no se encuentren todas las tuplas que califiquen en la consulta. \\
 
-	En segundo lugar, el proceso de extracción focalizada puede ser de tipo iterativo y que la búsqueda focalizada puede repetirse hasta que se cumpla que no se encuentren más valores de atributos. El motivo de esto es que si en la búsqueda focalizada se utiliza información sobre los atributos con valores diferentes de nulos de las instancias que están incompletas para facilitar la ubicación de los atributos faltantes, entonces la posibilidad de encontrar valores de atributos aumenta a medida que se tienen más atributos diferentes de nulo en la Base de Datos. Consecuentemente puede ser útil realizar estos tipos de consultas más de una vez. \\
+En segundo lugar, el proceso de extracción focalizada puede ser de tipo iterativo y que la búsqueda focalizada puede repetirse hasta que se cumpla que no se encuentren más valores de atributos. El motivo de esto es que si en la búsqueda focalizada se utiliza información sobre los atributos con valores diferentes de nulos de las instancias que están incompletas para facilitar la ubicación de los atributos faltantes, entonces la posibilidad de encontrar valores de atributos aumenta a medida que se tienen más atributos diferentes de nulo en la Base de Datos. Consecuentemente puede ser útil realizar estos tipos de consultas más de una vez. \\
 
 Se hace necesario una vez explicado el mecanismo general destacar que dado que las consultas realizadas tienden a ser por su naturaleza de menor complejidad que las consultas originales, es posible realizarlas como una consulta más en ODIL. Esto es, si se tiene por ejemplo una consulta con agregados (caso que se verá posteriormente), el mecanismo de determinación de la incompletitud trabajará sobre los miembros del mismo, por lo que la composición de la respuesta que realiza el procesador de consultas que hace ODIL no afecta de forma alguna la determinación del origen de incompletitud.\\
 
@@ -104,32 +92,35 @@ Como se ha visto, el proceso de determinar la incompletitud de una respuesta por
 
 La forma más simple la siguiente: 
 
-\QUERY{		
-LIST \textless Lista de atributos L1\textgreater INSTANCES \\
-SUCH THAT \textless Calificación de la consulta con condiciones sobre la lista de atributos L2\textgreater \\
-}
+\begin{tabbing}	
+\= LIST \textless Lista de atributos L1\textgreater \+ INSTANCES \\
+\= SUCH THAT \textless Calificación de la consulta con condiciones sobre la lista de atributos L2\textgreater \\
+\end{tabbing}
 
 Que genera dos tipos  de consultas adicionales diferentes para cada uno de los conceptos involucrados, para determinar incompletitud, a saber: \\
 
 1) Para cada atributo A perteneciente a L1: 
 
-\QUERY{		
-LIST \textless Clave del Concepto\textgreater INSTANCES \\
-SUCH THAT \textless A is null, Calificación de la consulta con las condiciones sobre la lista de atributos L2\textgreater; \\
-}
+\begin{tabbing}	
+\= LIST \textless Clave del Concepto\textgreater \+ INSTANCES \\
+\= SUCH THAT \= A is null \\ 
+\> \> AND \textless  Calificación parcial de la consulta con las condiciones sobre L2-{Atributo A}\textgreater ; \\
+\end{tabbing}
 
 2) Para cada atributo A perteneciente a L2: 
 
-\QUERY{	
-LIST \textless Clave del Concepto\textgreater INSTANCES \\
-SUCH THAT \textless A is null, Calificación parcial de la consulta con las condiciones sobre L2-{Atributo A}\textgreater; \\
-}
+\begin{tabbing}	
+\= LIST \textless Clave del Concepto\textgreater \+ INSTANCES \\
+\= SUCH THAT \= A is null \\ 
+\> \> AND \textless Calificación parcial de la consulta con las condiciones sobre L2-{Atributo A}\textgreater ; \\
+\end{tabbing}
 
-Para ilustrar este caso, considérese la siguiente consulta en ODIL: 
+Para ilustrar este caso, considérese la siguiente consulta en ODIL. Supongamos que nombre sirve de clave primaria para país. 
 
-\QUERY{
-LIST pais.poblacion INSTANCES\\
-SUCH THAT pais.capital = ‘Brasilia’;\\}
+\begin{tabbing}	
+\= LIST pais.poblacion \+ INSTANCES \\
+\= SUCH THAT pais.capital = ‘Brasilia’; \\ 
+\end{tabbing}
 
 Si la tupla correspondiente a Brasil no tiene un valor no nulo para el atributo capital la siguiente consulta dará una lista vacía, considerando que en la Base de Datos se tiene lo siguiente:\\
 
@@ -148,17 +139,18 @@ Brasil & Null & 5.000.000 \\
 
 	La consulta pertinente para determinar la incompletitud en este problema sería: 
 
-\QUERY{
-LIST pais.nombre INSTANCES \\
-SUCH THAT pais.capital is null; \\
-}
+\begin{tabbing}	
+\= LIST pais.nombre \+ INSTANCES \\
+\= SUCH THAT pais.capital is null; 
+\end{tabbing}
 
-y \\
+y 
 
-\QUERY{
-LIST pais.nombre INSTANCES \\
-SUCH THAT pais.poblacion is null AND  pais.capital = ‘Brasilia’; \\
-}
+\begin{tabbing}	
+\= LIST pais.nombre \+ INSTANCES \\
+\= SUCH THAT \= pais.poblacion is null \\ 
+\> \> AND  pais.capital = ‘Brasilia’; \\
+\end{tabbing}
 
 La primera consulta permite determinar que la capital de Brasil tiene un valor nulo. Análogamente, en caso de que la población tuviese un valor nulo, la segunda consulta determinaría que no se tiene la población de Brasil. \\
 
@@ -166,58 +158,66 @@ La primera consulta permite determinar que la capital de Brasil tiene un valor n
 
 Son del tipo: \\
 
-LIST \textless Función agregada sobre atributos L0, Lista de atributos L1\textgreater INSTANCES \\
-SUCH THAT \textless Calificación de la consulta con las condiciones sobre la lista de atributos L2\textgreater \\
+\begin{tabbing}	
+\= LIST  \textless Función agregada sobre atributos L0, Lista de atributos L1\textgreater INSTANCES \\
+SUCH THAT \textless Calificación de la consulta con las condiciones sobre la lista de atributos L2\textgreater
+\end{tabbing}
 
 	Que genera las siguientes consultas adicionales para determinar incompletitud (para cada concepto que participe): \\
 
 1) Para cada atributo A de L0 
 
-\QUERY{	
-LIST \textless Clave del Concepto\textgreater INSTANCES \\
-SUCH THAT  \textless A is null Calificación de la consulta con las condiciones sobre la lista de atributos L2\textgreater; \\
-}
+\begin{tabbing}	
+\= LIST \textless Clave del Concepto\textgreater INSTANCES \\
+\= SUCH THAT \= A is null \\
+\> \> AND \textless Calificación parcial de la consulta con las condiciones sobre la lista de atributos L2-A\textgreater; 
+\end{tabbing}
 
 2) Para cada atributo A de L1:
 
-\QUERY{	
-LIST \textless Clave del Concepto\textgreater INSTANCES \\
-SUCH THAT \textless A is null, Calificación de la consulta con las condiciones sobre la lista de atributos L2\textgreater; \\
-}
+\begin{tabbing}	
+\= LIST \textless Clave del Concepto\textgreater INSTANCES \\
+\= SUCH THAT \= A is null \\
+\> \> AND \textless Calificación parcial de la consulta con las condiciones sobre la lista de atributos L2-A\textgreater; 
+\end{tabbing}
 
 3)  Para cada atributo A perteneciente a L2: 
 
-\QUERY{	
-LIST \textless Clave del Concepto\textgreater INSTANCES \\
-SUCH THAT \textless A is null, Calificación parcial de la consulta con condiciones sobre L2-{Atributo A}\textgreater; \\
-}
+\begin{tabbing}	
+\= LIST \textless Clave del Concepto\textgreater INSTANCES \\
+\= SUCH THAT \= A is null \\
+\> \> AND \textless Calificación parcial de la consulta con las condiciones sobre la lista de atributos L2-A\textgreater;
+\end{tabbing}
 
 	En esencia las consultas generadas son muy similares a las consultas generadas en el caso simple, sólo que se añade la  verificación de nulos sobre los agregados. \\
 
 	Para consultas con funciones agregadas, se puede presentar este ejemplo: 
 	
-\QUERY{	
-LIST sum (pais.poblacion) INSTANCES \\
-SUCH THAT pais.nombre like ‘A’ OR pais.nombre like ‘B’ ; \\
-}
+\begin{tabbing}	
+\= LIST sum (pais.poblacion) INSTANCES \\
+\= SUCH THAT \= pais.nombre like ‘A’ \\
+\> \> OR pais.nombre like ‘B’ ; \\
+\end{tabbing}
 
 Genera las consultas: 
 
-\QUERY{	
-LIST pais. nombre\_pais INSTANCES \\
-SUCH THAT pais.poblacion is null AND (pais.abreviacion like ‘A\%’ OR pais.nombre abreviacion like ‘B\%’) ;\\
-}
+\begin{tabbing}	
+\= LIST pais.nombre INSTANCES \\
+\= SUCH THAT \= pais.poblacion is null \\
+\> \> AND (\= pais.abreviacion like ‘A\%’ \\
+\> \> \> OR pais.nombre abreviacion like ‘B\%’) ;\\
+\end{tabbing}
 
 La cual permite estar seguro de tener todas las poblaciones necesarias para calcular el agregado. También se genera la consulta: 
 
-\QUERY{	
-LIST nombre\_pais INSTANCES \\
-SUCH THAT pais.abreviacion is null; \\
-}
+\begin{tabbing}	
+\= LIST nombre INSTANCES \\
+\= SUCH THAT pais.abreviacion is null;
+\end{tabbing}
 
 Que permite ver que todas las abreviaciones estén completas.\\
 
-	Si se tienen los siguientes datos en la BD:\\
+Si se tienen los siguientes datos en la BD:\\
 	
 \begin{table}[h]
 \centering
@@ -236,82 +236,101 @@ Colombia & 40 & null\\
 \label{tabla-datos-ejemplo1FuenteIncompletitudConsultaFuncionesAgregadas}
 \end{table}
 
-La primera consulta determina que falta la población de Argentina. La segunda determina que falta la abreviación de Venezuela.\\
+La primera consulta determina que falta la población de Argentina. La segunda determina que falta la abreviación de Venezuela.
 
 \subsection{Consultas anidadas.}
 
 Son del tipo: 
 
-\QUERY{	
-LIST \textless Lista de atributos L1\textgreater INSTANCES \\
-SUCH THAT \textless Condiciones sobre la lista de atributos L2, Subconsulta LIST \textless Lista de atributos L3\textgreater INSTANCES \\
-SUCH THAT \textless Condiciones sobre la lista de atributos L4\textgreater \textgreater \\
-}
+\begin{tabbing}	
+\= LIST \textless Lista de atributos L1\textgreater INSTANCES \\
+\= SUCH THAT \= \textless Condiciones sobre la lista de atributos L2 \textgreater \\
+\> \> AND \= \textless Condicion con subconsulta \\
+\> \> \> (\= LIST \textless Lista de atributos L3\textgreater INSTANCES \\
+\> \> \> \> SUCH THAT \textless Condiciones sobre la lista de atributos L4\textgreater)\textgreater ;\\
+\end{tabbing}
+
 	Que genera las siguientes consultas adicionales para determinar incompletitud:\\
 
 1) Para cada atributo A de L1
 
-\QUERY{	
-LIST \textless Clave del Concepto\textgreater INSTANCES \\
-SUCH THAT \textless A is null AND Calificación con las condiciones de consulta anidada y la lista de atributos L2\textgreater; \\
-}
+\begin{tabbing}	
+\= LIST \textless Clave del Concepto\textgreater INSTANCES \\
+\= SUCH THAT \= A is null \\
+\> \> \textless Condiciones sobre la lista de atributos L2 - A \textgreater \\
+\> \> AND \= \textless Condicion con subconsulta \\
+\> \> \> (\= LIST \textless Lista de atributos L3 - A\textgreater INSTANCES \\
+\> \> \> \> SUCH THAT \textless Condiciones sobre la lista de atributos L4 - A\textgreater)\textgreater ;\\
+\end{tabbing}
 
 2)  Para cada atributo A perteneciente a L2: 
 
-\QUERY{	
-LIST \textless Clave del Concepto, Atributo A\textgreater INSTANCES \\
-SUCH THAT \textless A is null AND Calificación parcial de la consulta con las condiciones \\
-de la consulta anidada-{Atributo A} U L2-{Atributo A}\textgreater;
-}
+\begin{tabbing}
+	
+\= LIST \textless Clave del Concepto\textgreater INSTANCES \\
+\= SUCH THAT \= A is null \\
+\> \> \textless Condiciones sobre la lista de atributos L2 - A \textgreater \\
+\> \> AND \= \textless Condicion con subconsulta \\
+\> \> \> (\= LIST \textless Lista de atributos L3 - A\textgreater INSTANCES \\
+\> \> \> \> SUCH THAT \textless Condiciones sobre la lista de atributos L4 - A\textgreater)\textgreater ;\\
+\end{tabbing}
 
 3) Para cada atributo A de L3 
 
-\QUERY{	
-LIST \textless Clave del Concepto\textgreater INSTANCES \\
-SUCH THAT \textless A is null AND Calificación de la consulta con las condiciones sobre lista de atributos L4\textgreater; \\
-}
+\begin{tabbing}
+\= LIST \textless Clave del Concepto\textgreater INSTANCES \\
+\= SUCH THAT \= A is null \\
+\> \> \textless Condiciones sobre la lista de atributos L4 - A\textgreater);
+\end{tabbing}
 
 4)  Para cada atributo A perteneciente a L4: 
 
-\QUERY{	
-LIST \textless Clave del Concepto\textgreater INSTANCES \\
-SUCH THAT \textless A is null AND Calificación parcial de la consulta con las condiciones sobre la lista L4-{Atributo A}\textgreater; \\
-}
+\begin{tabbing}
+\= LIST \textless Clave del Concepto\textgreater INSTANCES \\
+\= SUCH THAT \= A is null \\
+\> \> \textless Condiciones sobre la lista de atributos L4 - A\textgreater);
+\end{tabbing}
 
-	El orden de resolución de estas consultas es similar al orden de resolución de consultas del caso más simple y general. En efecto, puede verse como un proceso Bottom-Up en el cual el árbol de la consulta se va resolviendo de abajo hacia arriba. \\
+El orden de resolución de estas consultas es similar al orden de resolución de consultas del caso más simple y general. En efecto, puede verse como un proceso en el cual el árbol de la consulta se va resolviendo de abajo hacia arriba.\\
+
+Si hay más de un nivel de anidamiento, el nivel más profundo de anidamiento puede ser resuelto como una consulta simple. A medida que se vaya descendiendo en el nivel de anidamiento (viendo las consultas anidadas como una pila), para cada consulta se tiene que seguir el modelo de la consulta simple eliminando en las consultas anidadas el atributo sobre el cual se quiere determinar alguna incompletitud (dicho en otras palabras, el atributo con la condición \emph{is null}). \\
 	
 	Por ejemplo, en la siguiente consulta se pide el clima de las regiones cuyas poblaciones totales son mayores a 100.000 habitantes: \\
 
-\QUERY{	
-LIST region.clima INSTANCES \\
-SUCH THAT 100000 \textless (list region$^\wedge$pais.poblacion\_pais instances) \\
-AND (region.abreviacion like ‘A*’  or region.abreviacion like ‘L*’ ) AND region.continente = ‘AMERICA’;\\
-}
+\begin{tabbing}
+\= LIST region.clima INSTANCES \\
+\= SUCH THAT \= 100000 \textless (list region$^\wedge$pais.poblacion\_pais instances) \\
+\> \> AND (region.abreviacion like ‘A*’  or region.abreviacion like ‘L*’ ) \\
+\> \> AND region.continente = ‘américa’;
+\end{tabbing}
 
 En este caso hay que realizar consultas para determinar que atributos faltan tanto en la consulta interior como en la consulta exterior:
 
-\QUERY{	
-1) LIST region.nombre INSTANCES \\
-SUCH THAT region.clima is null; \\
-}
+\begin{tabbing}
+1) \= LIST region.nombre INSTANCES \\
+\> SUCH THAT region.clima is null; \\
+\end{tabbing}
 
-\QUERY{	
-2) LIST region.nombre INSTANCES \\
-SUCH THAT region.continente is null AND 100000 \textless (list region$^\wedge$pais.poblacion\_pais instances)\\ 
-AND (region.abreviacion like ‘A*’  or region.abreviacion like ‘L* )\\
-}
+\begin{tabbing}
+2a) \= LIST region.nombre INSTANCES \\
+\> SUCH THAT \= region.continente is null \\
+\> \> AND 100000 \textless (list region$^\wedge$pais.poblacion\_pais instances)\\ 
+\> \> AND (region.abreviacion like ‘A*’  or region.abreviacion like ‘L* )\\
+\end{tabbing}
 
-\QUERY{	
-LIST region.nombre INSTANCES SUCH THAT \\
-region.abreviacion is null AND 100000 \textless (list region$^\wedge$pais.poblacion\_pais instances) AND  region.continente = ‘AMERICA’; \\
-}
+\begin{tabbing}
+2b) \= LIST region.nombre INSTANCES \\
+\> SUCH THAT \= region.abreviacion is null \\
+\> \> AND 100000 \textless (list region$^\wedge$pais.poblacion\_pais instances) \\
+\> \> AND  region.continente = ‘américa’; \\
+\end{tabbing}
 
-\QUERY{	
-3) LIST nombre\_pais, INSTANCES
-   SUCH THAT pais.poblacion is null;\\
-}
+\begin{tabbing}	
+3) \= LIST nombre\_pais, INSTANCES \\
+\> SUCH THAT pais.poblacion is null;
+\end{tabbing}
+
 Si se tienen los siguientes datos en la Base da Datos: \\
-
 
 \begin{table}[h]
 \centering
@@ -320,9 +339,9 @@ Si se tienen los siguientes datos en la Base da Datos: \\
 \hline
 Nombre de región & Clima & Continente & Abreviacion\\
 \hline
-Andina & Tropical & America & And\\
+Andina & Tropical & américa & And\\
 \hline
-Latinoamerica & null & America & null\\
+Latinoamérica & null & américa & null\\
 \hline
 \end{tabular*}
 \label{tabla-datos-ejemplo1FuenteIncompletitudConsultasAnidadas1}
@@ -346,83 +365,89 @@ Colombia & 35\\
 \label{tabla-datos-ejemplo1FuenteIncompletitudConsultasAnidadas2}
 \end{table}
 
-Y se tiene que la región andina está formada por Venezuela, Colombia y la región latinoamericana por Venezuela y Brasil. Entonces las consultas devuelven los siguientes resultados: 
+Y se tiene que la región andina está formada por Venezuela, Colombia y la región latinoaméricana por Venezuela y Brasil. Entonces las consultas devuelven los siguientes resultados: 
 
-\QUERY{	
-1)  Latinoamerica \\
-}
+\begin{tabbing}	
+1) Latinoamérica. \\
+2a) Vacía. \\
+2b)\= Andina.\\
+\> Latinoamérica.\\
+3) Venezuela. \\
+\end{tabbing}
 
-\QUERY{	
-2) vacia. \\
-\vspace{5 mm}
-Andina, And.\\
-Latinoamerica, null. (se determina que no se tiene la abreviación de latinoamerica). \\
-}
-
-\QUERY{	
-3) Venezuela \\
-}
 Así, las tres consultas realizada permiten determinar los atributos que están incompletos: la población de Venezuela (necesaria para el agregado) y el clima y abreviación de la región Lationamérica. \\
 
 \subsection{Consultas con agregados}
 
 El uso de agregados de la ontología puede ser manejado de forma similar a la manera como se aborda el uso de funciones agregadas. Es necesario verificar en primer lugar que las partes del agregado que se define esté completo, esto se puede hacer con las siguientes consultas: 
 
-\QUERY{	
-LIST \textless Lista de atributos L0 de conceptos que son partes del agregado, Lista de atributos L1\textgreater INSTANCES \\
-SUCH THAT \textless Calificación de la consulta con las condiciones sobre la lista de atributos L2\textgreater \\
-}
+\begin{tabbing}
+LIST \textless \= Lista de atributos L0 de conceptos que son partes del agregado, \\
+\> Lista de atributos L1\textgreater INSTANCES \\
+SUCH THAT \textless Calificación de la consulta con las condiciones sobre la lista de atributos L2\textgreater 
+\end{tabbing}
 
-Que genera las siguientes consultas adicionales para determinar incompletitud: 
+O también de la forma:
+
+\begin{tabbing}
+LIST \textless Lista de atributos L1\textgreater INSTANCES \\
+SUCH THAT \textless \= Calificación de la consulta con las condiciones sobre la lista de atributos L2\\
+\> y sobre la lista de atributos L0 de conceptos que son partes del agregado\textgreater 
+\end{tabbing}
+
+Que genera las siguientes consultas adicionales para determinar incompletitud: \\
 
 1) Para cada atributo A de L0 (lista de atributos del concepto parte) 
 
-\QUERY{	
-LIST \textless Clave del Concepto parte del agregado\textgreater INSTANCES \\
-SUCH THAT  \textless A is null AND Calificación de la consulta con condiciones sobre la lista de atributos L2\textgreater; \\
-}
+\begin{tabbing}	
+LIST \textless Clave del Concepto \textgreater INSTANCES \\
+SUCH THAT  \= \textless A is null \\
+\> AND Calificación de la consulta con condiciones sobre la lista de atributos L2 -A \textgreater; \\
+\end{tabbing}
 
 2) Para cada atributo A de L1 
 
-\QUERY{	
-LIST \textless Clave del Concepto sobre el que se hace la consulta\textgreater INSTANCES \\
-SUCH THAT \textless A is null AND Calificación de la consulta con condiciones sobre la lista de atributos L2\textgreater; \\
-}
+\begin{tabbing}	
+LIST \textless Clave del Concepto \textgreater INSTANCES \\
+SUCH THAT  \= \textless A is null \\
+\> AND Calificación de la consulta con condiciones sobre la lista de atributos L2 -A \textgreater; \\
+\end{tabbing}
 
 3) Para cada atributo A perteneciente a L2: 
 
-\QUERY{	
-LIST \textless Clave del Concepto sobre el que se hace la consulta\textgreater INSTANCES \\
-SUCH THAT \textless A is null AND Calificación parcial de la consulta con condiciones sobre L2-{Atributo A}\textgreater; \\
-}
+\begin{tabbing}	
+LIST \textless Clave del Concepto \textgreater INSTANCES \\
+SUCH THAT  \= \textless A is null \\
+\> AND Calificación de la consulta con condiciones sobre la lista de atributos L2 -A \textgreater; \\
+\end{tabbing}
 
 Aunado a esto, existe otro origen de incompletitud para este subcaso que se debe contemplar. Puede darse el caso de que el agregado no esté completo. Es decir, puede ser que falten instancias en la lista de los miembros del agregado. Por ejemplo si se tiene un concepto “Equipo” que es un agregado de “Jugadores”, puede ser que falten jugadores en un equipo.\\
 
-Desafortunadamente este problema no puede ser resuelto con el mecanismo propuesto para resolver incompletitud por la falta de valores de atributos. En cierta forma, es comparable con el problema de descubrir interrelaciones entre conceptos a partir de la extracción, ya que el pertenecer a un agregado es una interrelación.\\
+Desafortunadamente este problema no puede ser resuelto con el mecanismo propuesto para resolver incompletitud por la falta de valores de atributos. En cierta forma, es comparable con el problema de descubrir interrelaciones entre conceptos a partir de la extracción, ya que el pertenecer a un agregado puede ser visto como una interrelación.\\
 	
 Por ejemplo se tiene el siguiente caso: 
 
-\QUERY{	
+\begin{tabbing}
 LIST region$^\wedge$pais.poblacion\_pais, region.clima INSTANCES\\
-SUCH THAT region.abreviacion like ‘And’; \\
-}
+SUCH THAT region.abreviacion like ‘And’; 
+\end{tabbing}
 
 Se generan las siguientes consultas: 
 
-\QUERY{	
-1) LIST pais.nombre INSTANCES \\
-SUCH THAT pais.poblacion\_pais is null; \\
-}
+\begin{tabbing}
+1) \= LIST pais.nombre INSTANCES \\
+\> SUCH THAT pais.poblacion\_pais is null; 
+\end{tabbing}
 
-\QUERY{	
-2) LIST region.nombre INSTANCES \\
-SUCH THAT region.clima is null AND region.abreviacion like ‘And’; \\
-}
+\begin{tabbing}
+2) \= LIST region.nombre INSTANCES \\
+\> SUCH THAT region.clima is null AND region.abreviacion like ‘And’; 
+\end{tabbing}
 
-\QUERY{	
-3) LIST region.nombre INSTANCES \\
-SUCH THAT region.abreviacion is null; \\
-}
+\begin{tabbing}
+3) \= LIST region.nombre INSTANCES \\
+\> SUCH THAT region.abreviacion is null; 
+\end{tabbing}
 
 Si se tienen los siguientes datos: \\
 
@@ -437,7 +462,7 @@ Venezuela & 35 & Andina\\
 \hline
 Colombia & null & Andina\\
 \hline
-México & 20 & Norteamerica\\
+México & 20 & Norteamérica\\
 \hline
 \end{tabular*}
 \label{tabla-datos-ejemplo1FuenteIncompletitudConsultasAgregados1}
@@ -452,7 +477,7 @@ Nombre & Abreviacion & Clima\\
 \hline
 Andina & And & Tropical\\
 \hline
-Nortamerica & null & null\\
+Nortamérica & null & null\\
 \hline
 \end{tabular*}
 \label{tabla-datos-ejemplo1FuenteIncompletitudConsultasAgregados2}
@@ -460,11 +485,11 @@ Nortamerica & null & null\\
 
 Las consultas devuelven:
 
-\QUERY{
-1) Colombia (falta su población). \\
-2) Nortamerica. (falta el clima) \\
-3) Norteamerica. (falta la abreviacion). \\
-}
+\begin{tabbing}
+1) Colombia. \\
+2) Norteamérica. \\
+3) Norteamérica. \\
+\end{tabbing}
 
 \subsection{Consultas con relaciones de especialización-generalización.}
 
