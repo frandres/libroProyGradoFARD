@@ -1,0 +1,294 @@
+\begin{tabbing}	
+\= LIST Profesor.Nombre INSTANCES \\
+\= SUCH THAT EsAsignado.FechaAsignacion = 1-2-2002 \\
+\end{tabbing}
+
+\begin{tabbing}	
+\= LIST Profesor.Nombre INSTANCES \\
+\= SUCH THAT EsAsignado.Calificacion = Coordinador del Postgrado en Gerencia \\
+\end{tabbing}
+
+\begin{tabbing}	
+\= LIST Profesor.Nombre INSTANCES \\
+\= SUCH THAT EsAsignado.Motivo = en sustitución de la Lic. Cecilia Hernández de Barroso. \\
+\end{tabbing}
+
+\begin{tabbing}	
+\= LIST EsAsignado.Calificacion INSTANCES \\
+\= SUCH THAT Profesor.Nombre = Lic. Gilberto Balza. \\
+\end{tabbing}
+
+\begin{tabbing}	
+\= LIST Profesor.Nombre INSTANCES \\
+\= SUCH THAT EsAsignado.FechaFinal = 30-3-2012 \\
+\end{tabbing}
+
+\begin{tabbing}	
+\= LIST MAX(EsAsignado.FechaAsignacion) INSTANCES \\
+\end{tabbing}
+
+\begin{tabbing}	
+\= LIST MIN(EsAsignado.FechaAsignacion) INSTANCES \\
+\end{tabbing}
+
+8
+
+\begin{tabbing}	
+\= LIST Profesor.Nombre INSTANCES \\
+\= SUCH THAT EsAsignado.FechaAsignacion = 1-9-2002 \\
+(EsAsignado.Calificacion = Jefe del Departamento de Mecánica AND EsAsignado.FechaAsignacion = 1-1-2000)
+\end{tabbing}
+
+9
+
+\begin{tabbing}	
+\= LIST EsAsignado.Calificacion INSTANCES \\
+\= SUCH THAT Profesor.Nombre = Carlota Pasquali Toledo OR \\
+(Profesor.Nombre = TSU. Ana Rosa Ibáñez AND EsAsignado.FechaAsignacion = 1-1-2003) OR
+(Profesor.Nombre = Prof. Paulo Manuel De Oliveira AND EsAsignado.FechaAsignacion = 08-02-2010))
+\end{tabbing}
+
+10
+
+\begin{tabbing}	
+\= LIST Profesor.Nombre INSTANCES \\
+\= SUCH THAT EsAsignado.FechaAsignacion < 1-1-2009 AND EsAsignado.Calificacion = Jefa del Departamento de Ciencia y Tecnología del Comportamiento \\
+\end{tabbing}
+
+11
+
+\begin{tabbing}	
+\= LIST Profesor.Nombre INSTANCES \\
+\= SUCH THAT EsAsignado.FechaAsignacion >= 1-12-2000 AND EsAsignado.FechaAsignacion < 1-2-2001 \\
+\end{tabbing}
+
+12
+
+\begin{tabbing}	
+\= LIST Profesor.Nombre INSTANCES \\
+\= SUCH THAT EsAsignado.Calificacion = Jefe del Departamento de Cómputo Científico y Estadística \\
+\end{tabbing}
+
+13
+
+\begin{tabbing}	
+\= LIST EsAsignado.FechaAsignacion \\
+\= SUCH THAT (Profesor.Nombre = Prof. José Rafael Martínez Colina OR \\
+(Profesor.Nombre = Prof. Solange Issa AND EsAsignado.Calificacion = Coordinadora de Ciencias Biológicas)  
+(EsAsignado.Calificacion = Directora Encargada del Centro de Documentación y Archivo-CENDA))
+\end{tabbing}
+
+14
+
+\begin{tabbing}	
+\= LIST Profesor.Nombre \\
+\= SUCH THAT EsAsignado.Calificacion = Directora de Finanzas OR \\
+EsAsignado.Calificacion = Jefe del Departamento de Conversión y Transporte de Energía
+\end{tabbing}
+
+15
+
+\begin{tabbing}	
+\= LIST EsAsignado.FechaAsignacion \\
+\= SUCH THAT Profesor.Nombre = Prof. Roberto Cipriani AND \\
+EsAsignado.Calificacion = Jefe del Dpto. de Estudios Ambientales
+\end{tabbing}
+
+16
+
+
+\begin{tabbing}	
+\= LIST EsAsignado.Motivo \\
+\= SUCH THAT Profesor.Nombre = Prof. Gioia Kinzbruner AND \\
+EsAsignado.Calificacion = Coordinadora del Ciclo Profesional del Decanato de Estudios Generales
+\end{tabbing}
+
+
+% ----------
+
+Jurados de ascenso.
+
+1. 
+
+\begin{tabbing}	
+\= LIST Profesor.Nombre \\
+\= SUCH THAT Trabajo.Nombre = OBRAS SOLISTAS, DE CÁMARA Y SINFÓNICA ESCRITAS ENTRE 1997 Y 2001 DE DIANA ARISMENDI Y SU MARCO REFERENCIAL \\
+\end{tabbing}
+
+2.
+
+\begin{tabbing}	
+\= LIST Profesor.Nombre \\
+\= SUCH Jurado.Presidente = Rafael Tomás Caldera AND Jurado.SuplenteExterno = Lionel Pedrique Orta REFERENCIAL \\
+\end{tabbing}
+
+3. 
+
+\begin{tabbing}	
+\= LIST Trabajo.Nombre \\
+\= SUCH Profesor.Nombre = PAULETTE SILVA AND Jurado.Presidente = Graciela Montaldo \\
+\end{tabbing}
+
+4.
+
+\begin{tabbing}	
+\= LIST Profesor.Nombre \\
+\= SUCH Trabajo.Nombre = USO DE SUBPRODUCTOS INDUSTRIALES Y PRODUCTOS AGRICOLAS NO CONVENCIONALES EN LA ELABORACION DE PASTAS CORTAS 
+(Profesor.Departamento = Departamento de Ciencia de los Materiales AND Trabajo.Escalafon = ASOCIADO AND 
+ Jurado.Presidente = Benjamín Scharifker))
+\end{tabbing}
+
+5.
+
+\begin{tabbing}	
+\= LIST Trabajo.Nombre \\
+\= SUCH Jurado.MiembroPrincipalExterno = Antonio de Lisio AND
+Jurado.Presidente = Rosa Chacón AND
+Jurado.MiembroPrincipalInterno = Servando Álvarez
+\end{tabbing}
+
+6.
+
+\begin{tabbing}	
+\= LIST Trabajo.Nombre \\
+\= SUCH Trabajo.Escalafon = Asociado \\
+\end{tabbing}
+
+7.
+
+\begin{tabbing}	
+\= LIST Trabajo.Nombre \\
+\= SUCH Trabajo.Escalafon = ASOCIADO \\
+\end{tabbing}
+
+8.
+
+\begin{tabbing}	
+\= LIST Trabajo.Nombre \\
+\= SUCH Trabajo.Escalafon = TITULAR \\
+\end{tabbing}
+
+9.
+
+LIST Trabajo.Nombre INSTANCES SUCH THAT 
+Profesor.Departamento = Departamento de Ciencias Sociales
+
+10
+
+LIST Trabajo.Nombre INSTANCES SUCH THAT 
+Jurado.Presidente = Alfredo Ascanio
+
+11
+
+LIST Trabajo.Nombre INSTANCES SUCH THAT 
+Jurado.MiembroPrincipalInterno = Laszlo Sajo
+
+12
+
+LIST Trabajo.Nombre INSTANCES SUCH THAT 
+Jurado.MiembroPrincipalExterno = Rosa del Carmen López D`Amico
+
+13
+
+LIST Trabajo.Nombre INSTANCES SUCH THAT 
+Jurado.SuplenteExterno = Pablo Ríos
+
+14.
+
+LIST Trabajo.Nombre INSTANCES SUCH THAT 
+Jurado.SuplenteInterno = Guillermo Liscano
+
+15.
+
+LIST Trabajo.Nombre INSTANCES SUCH THAT 
+Profesor.Nombre = RÓGER CORBACHO
+
+16.
+
+LIST Profesor.Departamento INSTANCES SUCH THAT 
+(Trabajo.Nombre = CONTROL – DESIGN: UNA HERRAMIENTA PARA EL DISEÑO DE CONTROLADORES OR Trabajo.Nombre = “EL SIGNIFICADO DE LA DEMOCRACIA EN VENEZUELA: UN ESTUDIO PSICO-POLÍTICO DE UNA RESPRESENTACIÓN SOCIAL OR (Jurado.Presidente = María Pérez AND Trabajo.Escalafon = ASOCIADO))
+
+%
+
+% ---------
+
+1.
+
+LIST EsAscendido.fecha INSTANCES
+SUCH THAT EsAscendido.NombreTrabajo = "FUNCIÓN PÚBLICA, DESCENTRALIZACIÓN Y PLANIFICACIÓN URBANA LOCAL, ESTUDIO DE CASOS EN EL ÁREA METROPOLITANA DE CARACAS"
+
+2.
+
+LIST EsAscendido.NombreTrabajo INSTANCES SUCH THAT 
+EsAscendido.Nombre = GLADYS ROMERO y JORGE E. GONZÁLEZ AND EsAscendido.fecha = 1-9-2001
+
+3.
+
+LIST EsAscendido.NombreTrabajo INSTANCES
+SUCH THAT EsAscendido.Fecha= 15-10-2001
+
+4.
+
+LIST EsAscendido.Nombre INSTANCES SUCH THAT 
+EsAscendido.NombreTrabajo = ARTÍCULOS EN FÍSICA DE SÓLIDOS, CALENTAMIENTO INDUCTIVO, ELECTRÓNICA DE POTENCIA Y ENERGIAS ALTERNATIVAS
+
+5.
+
+LIST EsAscendido.Escalafon INSTANCES SUCH THAT 
+EsAscendido.NombreTrabajo = MODELAJE DE QUIMIOTERAPIAS CON DROGAS CITO-TOXICAS Y CITO-ESTÁTICAS AND EsAscendido.Nombre = MINAYA VILLASANA
+
+6.
+
+LIST EsAscendido.Nombre INSTANCES SUCH THAT 
+EsAscendido.Fecha = 1-5-04
+
+7.
+
+LIST MIN EsAscendido.fecha INSTANCES
+SUCH THAT EsAscendido.Escalafon = 'TITULAR'
+
+8.
+
+LIST MAX EsAscendido.fecha INSTANCES
+SUCH THAT EsAscendido.Escalafon = 'TITULAR'
+
+9.
+
+LIST EsAscendido.NombreTrabajo INSTANCES SUCH THAT 
+EsAscendido.Fecha = 15-07-2004
+
+10. 
+
+LIST EsAscendido.NombreTrabajo INSTANCES SUCH THAT 
+EsAscendido.Nombre = GUILLERMO VALENCIA ASTUDILLO
+
+11.
+
+LIST EsAscendido.NombreTrabajo INSTANCES SUCH THAT 
+EsAscendido.Nombre = WILLIAM ANSEUME
+
+12.
+
+LIST EsAscendido.Nombre INSTANCES SUCH THAT 
+(EsAscendido.NombreTrabajo = LA PLAENACIÓN ESTRATÉGICA EN DISTINTOS ÁMBITOS ORGANIZACIONALES OR 
+(EsAscendido.Fecha = 15-9-2005 AND EsAscendido.Escalafon = ASOCIADO))
+
+13.
+
+LIST EsAscendido.NombreTrabajo INSTANCES SUCH THAT 
+((EsAscendido.Nombre = BELKYS JIMÉNEZ AND EsAscendido.Escalafon = TITULAR) OR (EsAscendido.Nombre = GLADYS RONCA:  AND EsAscendido.Escalafon = TITULAR) OR (EsAscendido.Nombre = ALFREDO ROJAS SANTAELLA AND EsAscendido.Escalafon = ASOCIADO))
+
+14.
+
+LIST EsAscendido.NombreTrabajo INSTANCES SUCH THAT 
+EsAscendido.Escalafon = AGREGADO
+
+15.
+
+LIST EsAscendido.NombreTrabajo INSTANCES SUCH THAT 
+EsAscendido.Escalafon = ASOCIADO
+
+16. 
+
+LIST EsAscendido.Nombre INSTANCES SUCH THAT 
+EsAscendido.Fecha >= 15-9-2005 AND EsAscendido.Fecha <= 30-9-2005

@@ -4,9 +4,8 @@ Con el objetivo de realizar las pruebas sobre el sistema se utilizaron tres domi
 
 La selección de los documentos se realizó sobre el conjunto de las actas de los Consejos Directivo y Académico de la Universidad Simón Bolívar desde el año 1998 hasta el año 2012. Esto permite que las pruebas se hagan sobre un conjunto de documentos que pueden tener variabilidad en su estilo, redacción y estructura. Del conjunto de actas en el intervalo de tiempo especificado, se hizo una preselección de los documentos para utilizar las actas de los consejos ordinarios. Adicionalmente, según cada dominio de aplicación se extrajeron las actas que sí contienen información sobre los dominios. Es decir, se utilizaron los documentos que contienen información sobre los dominios elegidos, descartando aquellas actas que no contenían texto de interés.\\
 
-Una vez definidos los dominios se definieron varios conjuntos de prueba. En primera instancia se probaron el Determinador de Origen de Incompletitud y el Buscador Focalizado de Información por separado. Luego se hicieron pruebas sobre ambos compontentes integrados. A continuación se describen con mayor profundidad las pruebas realizadas sobre el sistema. \\
+Una vez definidos los dominios se realizaron dos tipos de pruebas. En primer lugar se realizó un conjunto de pruebas unitarias sobre el Buscador Focalizado de Información, con el objetivo de probar el funcionamiento del extractor de información. Una vez verificado un buen funcionamiento de este módulo, se realizaron pruebas globales definiendo una serie de consultas sobre los tres dominios. La resolución de estas consultas requería el procesamiento de las mismas según lo especificado en el Determinador de Origen de Incompletitud y la búsqueda de información utilizando el Buscador Focalizado de Información.  \\
 
-\section{Pruebas unitarias sobre el Determinador de Origen de Incompletitud.} 
 
 \section{Pruebas unitarias sobre el Buscador Focalizado de Información}
 
@@ -116,3 +115,17 @@ La importante del Unit Hit Measure es que de no tener exigencias sobre el mínim
 A manera de conclusión, el análisis aquí busca ilustrar, más que desmenuzar toda la información que se puede extraer de estas pruebas, los principales hallazgos producto de la utilización del extractor.Los resultados completos se pueden ver en el apéndice \ref{chap:apendiceb}.  Los hallazgos más importantes son que la utilización de expresiones regulares depende, como podría esperarse, fuertemente de la regularidad de un documento en su estructura y estilo de redacción, que está condicionada a errores humanos de tipeo y que depende de los delimitadores que un usuario experto pueda definir. De igual forma, depende fuertemente de cada uno de los campos y de la forma como se encuentran esos campos en el texto. Influye también la posición relativa de ellos.\\
 
 La existencia de información previa, el contexto de extracción, que es precisamente la principal ventaja de la extracción focalizada, incide de forma determinante en el hallazgo de información faltante en la ontología.\\
+
+\section{Pruebas globales del sistema}
+
+Para realizar las pruebas globales del sistema, se preparó un conjunto de quince consultas para cada dominio de información definido previamente. La selección de las consultas para cada dominio de información fue realizada atendiendo varios criterios. Primeramente, se buscó que como mínimo hubiese una consulta que buscase resolver una incompletitud para cada atributo de los dominios. Es decir, que para cada atributo hubiese alguna consulta en la cual hubiese incompletitud por desconocimiento del valor de ese atributo en la base de datos. Además de esto, se eligieron consultas para probar el funcionamiento de operadores de agregación, incompletitud con atributos con relaciones de mayor o menor y cadenas AND-OR.
+
+Aunado a esto, para realizar estas pruebas se llenó manualmente una base de datos para simular la existencia de información previa sobre los dominios de información. La selección de las tuplas que se utilizó para llenar la base de datos fue aleatoria. De igual manera, para cada tupla seleccionada para incorporar a la base de datos, se eligieron aleatoriamente algunos campos que si bien su valor era conocido fueron dejados en nulo. El objetivo de esto último es poder simular no sólo la inexistencia de alguna tupla en la base de datos, sino también la incompletitud de la información de cada tupla contenida. 
+
+Una vez determinadas las consultas y construida una base de datos de prueba, se procedió a ejecutar las consultas. Se tomaron los datos obtenidos en base a la información contenida en la base de datos antes y despues de realizar la extracción focalizada de información y se contrastó con la respuesta correcta. La respuesta correcta fue determinada  examinando directamente los documentos.
+
+De igual manera, para la realización de las pruebas se decidió tomar como Unit Hit Measure un valor de .1. 
+
+A continuación se presentan los resultados obtenidos por dominio.
+
+\input{tablasPruebasGlobales}
